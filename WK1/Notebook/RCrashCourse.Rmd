@@ -1,0 +1,450 @@
+---
+title: "R crash course"
+output:
+  html_document:
+    df_print: paged
+---
+
+This is an R crash couse, adpated and revised based on an [online tutorial](https://billpetti.github.io/Crash_course_in_R/).
+
+Let's firstly setup a working directory
+
+```{r setup}
+knitr::opts_knit$set(root.dir="/home/vmuser/Desktop/PHC6194SPR2021/WK1")
+```
+
+We can assign objects using "<-"
+
+```{r}
+foo <- "hello world!"
+foo
+```
+
+R is case-sensitive
+
+```{r error=TRUE}
+myvar <- 1
+Myvar
+myvar
+```
+
+We can add comments by using "#"
+
+```{r error=TRUE}
+#foo2 <- "hello world!"
+foo2
+```
+
+Data structures:
+
+Let's look at vector first, which can be defined using c()
+
+```{r}
+x <- c(1,2,3,4,5)
+x 
+firstNames <- c("Shinji","Aska","Rey","Misato")
+firstNames
+```
+
+We can access the different parts of the vector using index: [idx]
+
+```{r}
+firstNames[3]
+```
+
+str() will allow us to explore the structure of a vector
+
+```{r}
+str(firstNames)
+```
+
+R treat categorical variables as factors. We can define that by using as.factor()
+
+```{r}
+gender <- c("f","f","f","m","m","m")
+gender <- as.factor(gender)
+str(gender)
+```
+
+List is another data structure in R, which is a sequence of elements of different types
+
+```{r}
+myList <- list(x=x,firstNames=firstNames,gender=gender)
+myList
+```
+
+We can access specific elements within the list
+
+```{r}
+myList[[1]]
+myList$x
+myList[["x"]]
+```
+
+Now let's move on to data frames
+
+```{r}
+franchise <- c("Mets", "Nationals", "Marlins", "Phillies", "Braves")
+city <- c("New York", "Washington, DC", "Miami", "Philadelphia", "Atlanta")
+teams <- data.frame(franchise, city)
+teams
+```
+
+We can get names of variables using colnames()
+
+```{r}
+colnames(teams)
+
+```
+
+Let's write our first function: mean calculation
+
+```{r}
+our.mean <- function(x){
+  return(sum(x) / length(x))
+}
+```
+
+Let's run the function on some data
+
+```{r}
+x <- c(1, 2, 3, 4, 5)
+x
+our.mean(x) #self-defined mean
+```
+
+We can compare it with the built-in mean function
+
+```{r}
+mean(x) #built-in mean 
+mean(x) == our.mean(x) #check whether these two values are equivalent
+```
+
+A more complex function
+
+```{r}
+our.summary <- function(x) {
+  mean <- mean(x)
+  median <- median(x)
+  standard_deviation <- sd(x)
+  foo <- cbind(mean, median, standard_deviation)
+  return(foo)
+}
+
+our.summary(x)
+```
+
+Install, load, and unload packages
+
+```{r}
+install.packages("ggplot2") #install
+library(ggplot2) #load
+detach("package:ggplot2") #unload
+```
+
+Read data into R
+
+```{r}
+dat1 <- read.csv("dat1.csv",header = TRUE, na.strings="NA")
+str(dat1)
+head(dat1)
+```
+
+Treat strings as non-factors
+
+```{r}
+dat1 <- read.csv("dat1.csv",header = TRUE, na.strings="NA",stringsAsFactors = FALSE)
+str(dat1)
+head(dat1)
+
+```
+
+We can output data from R
+
+```{r}
+write.csv(dat1,"~/Desktop/dat2.csv",row.names = F)
+```
+
+Some data manipulation using the built-in data "iris"
+
+```{r}
+data(iris) #load the built-in data "iris"
+head(iris)
+head(iris$Sepal.Length)
+```
+
+An easier way to access more than one variables
+
+```{r}
+head(with(iris,Sepal.Length/Sepal.Width))
+
+iris$sepal_length_width_ratio <- with(iris, Sepal.Length / Sepal.Width)
+head(iris)
+iris$sepal_length_width_ratio <- round(iris$sepal_length_width_ratio, 2)
+head(iris)
+```
+
+Categorize a variable into tertiles
+
+```{r}
+iris$sepal_length_width_ratioG<-cut(iris$sepal_length_width_ratio,breaks=quantile(iris$sepal_length_width_ratio,probs=c(0,0.33,0.67,1)),include.lowest = T)
+str(iris)
+```
+
+Convert factor into numeric
+
+```{r}
+iris$sepal_length_width_ratioG<-as.numeric(iris$sepal_length_width_ratioG)
+str(iris)
+```
+
+Quick summary of a variable
+
+```{r}
+summary(iris$sepal_length_width_ratio)
+
+```
+
+Subsetting data
+
+```{r}
+unique(iris$Species)
+
+sub_virginica <- subset(iris, Species == "virginica")
+head(sub_virginica)
+unique(sub_virginica$Species)
+
+ex_virginica <- subset(iris, Species != "virginica")
+unique(ex_virginica$Species)
+
+sub_virginica2 <- subset(iris, Species != "virginica" & sepal_length_width_ratio >= 2)
+head(sub_virginica2)
+```
+
+Select specific variables
+
+```{r}
+head(iris[,c(1,3)])
+```
+
+Select specific cases/rows
+
+```{r}
+iris[c(1:6),]
+```
+
+Basic descriptive and summary statistics
+```{r}
+data(airquality)
+summary(airquality)
+```
+
+dplyr package
+
+```{r}
+if (!require(dplyr)) {
+  install.packages(dplyr)
+}
+```
+
+Frequency tables
+
+```{r}
+with(iris,table(Species,Petal.Width))
+table(iris$Species,iris$Petal.Width)
+
+with(iris, table(Species, Petal.Width)) %>% prop.table()
+
+
+
+```
+
+Column frequencies
+
+```{r}
+with(iris, table(Species, Petal.Width)) %>% prop.table(margin = 1)  #row frequencies
+```
+
+Row frequencies
+
+```{r}
+with(iris, table(Species, Petal.Width)) %>% prop.table(margin = 2)  #column frequencies
+cross_column<-with(iris, table(Species, Petal.Width)) %>% prop.table(margin = 2) %>% as.data.frame.matrix() 
+```
+
+Basic statistics and modeling
+
+```{r}
+dat2<-read.csv("survey_sample_data.csv",header = T, stringsAsFactors = F)
+str(dat2)
+```
+
+Correlation
+
+```{r}
+cor(dat2$Q1,dat2$Q2,use="pairwise.complete.obs")
+cor(dat2[,c(2:19)], use = "pairwise.complete.obs")
+round(cor(dat2[,c(2:19)], use = "pairwise.complete.obs"),3)
+```
+
+Linear regression
+
+```{r}
+head(iris)
+
+iris_lm <-lm(Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width+ factor(Species),data=iris)
+
+summary(iris_lm)
+
+iris_lm$coefficients
+confint(iris_lm)
+```
+
+Visualization:
+Histogram
+
+```{r}
+hist(dat2$Q2)
+
+hist(dat2$Q2, main = "Frequency of Responses to Q2", xlab = "Response Value",breaks = c(0.0, 1.0, 2.0, 3.0, 4.0, 5.0))
+
+```
+
+Scatterplots
+
+```{r}
+plot(Sepal.Length~Sepal.Width,data=iris)
+
+```
+
+Boxplots
+
+```{r}
+boxplot(iris$sepal_length_width_ratio)
+
+```
+
+Use ggplot2 to enhance visualizations
+
+```{r}
+if (!require(ggplot2)) {
+  install.packages(ggplot2)
+}
+
+```
+
+Better scatterplots for iris
+
+```{r}
+ggplot(iris,aes(x=Sepal.Width,y=Sepal.Length))+geom_point()
+
+```
+
+Different color by species
+
+```{r}
+ggplot(iris,aes(x=Sepal.Width,y=Sepal.Length))+geom_point(aes(color=Species)) #
+
+```
+
+Differnet size proportional to sepal length width ratio
+
+```{r}
+ggplot(iris,aes(x=Sepal.Width,y=Sepal.Length))+geom_point(aes(color=Species,size=sepal_length_width_ratio)) #
+
+```
+
+Add some transparency
+
+```{r}
+ggplot(iris,aes(x=Sepal.Width,y=Sepal.Length))+geom_point(aes(color=Species,size=sepal_length_width_ratio,alpha=.3)) #
+```
+
+Add a trend line
+
+```{r}
+ggplot(iris,aes(x=Sepal.Width,y=Sepal.Length))+geom_point(aes(color=Species,size=sepal_length_width_ratio,alpha=.3))+stat_smooth() 
+```
+
+Seperate plots by species
+
+```{r}
+ggplot(iris,aes(x=Sepal.Width,y=Sepal.Length))+geom_point(aes(color=Species,size=sepal_length_width_ratio,alpha=.3)) +stat_smooth() +facet_wrap(~Species) #separate plots by species
+
+```
+
+Density plots
+
+```{r}
+if (!require(reshape2)) {
+  install.packages(reshape2)
+}
+
+dat2_melt<-melt(dat2[,c(2:19)])
+ggplot(dat2_melt,aes(value))+geom_density()+facet_wrap(~variable)
+
+```
+
+Boxplots
+
+```{r}
+ggplot(iris,aes(y=sepal_length_width_ratio,x=Species))+geom_boxplot()
+```
+
+Customize
+
+```{r}
+ggplot(iris,aes(x=Sepal.Width,y=Sepal.Length))+geom_point(aes(color=Species,size=sepal_length_width_ratio,alpha=.3)) +stat_smooth() +facet_wrap(~Species) 
+```
+
+Add title
+
+```{r}
+ggplot(iris,aes(x=Sepal.Width,y=Sepal.Length))+geom_point(aes(color=Species,size=sepal_length_width_ratio,alpha=.3)) +stat_smooth() +facet_wrap(~Species) + ggtitle("Sepal Length versus Sepal Width") + xlab("Sepal Width")+ylab("Sepal Length") #add title and labels
+```
+
+Resize and bold
+
+```{r}
+ggplot(iris,aes(x=Sepal.Width,y=Sepal.Length))+geom_point(aes(color=Species,size=sepal_length_width_ratio,alpha=.3)) +stat_smooth() +facet_wrap(~Species) + ggtitle("Sepal Length versus Sepal Width") + xlab("Sepal Width")+ylab("Sepal Length") + theme(axis.title=element_text(face="bold",size=14),plot.title=element_text(face="bold",size=16)) #resize and bold
+```
+
+Remove the shading
+
+```{r}
+ggplot(iris,aes(x=Sepal.Width,y=Sepal.Length))+geom_point(aes(color=Species,size=sepal_length_width_ratio,alpha=.3)) +stat_smooth() +facet_wrap(~Species) + ggtitle("Sepal Length versus Sepal Width") + xlab("Sepal Width")+ylab("Sepal Length") + theme(axis.title=element_text(face="bold",size=14),plot.title=element_text(face="bold",size=16))+ theme(panel.background=element_blank()) #remove the shading
+```
+
+Use custom color palettes
+
+```{r}
+ggplot(iris,aes(x=Sepal.Width,y=Sepal.Length))+geom_point(aes(color=Species,size=sepal_length_width_ratio,alpha=.3)) +stat_smooth() +facet_wrap(~Species) + ggtitle("Sepal Length versus Sepal Width") + xlab("Sepal Width")+ylab("Sepal Length") + theme(axis.title=element_text(face="bold",size=14),plot.title=element_text(face="bold",size=16))+ theme(panel.background=element_blank()) + scale_color_brewer(palette="Greens") #use custom coclr palettes
+```
+
+Correlation heatmap
+
+```{r}
+dat2_cor_melt<-melt(cor(dat2[,c(2:19)],use="pairwise.complete.obs"))
+dat2_cor_melt$value<-round(dat2_cor_melt$value,2)
+head(dat2_cor_melt)
+
+ggplot(dat2_cor_melt, aes(Var1, Var2)) + geom_tile(aes(fill = value)) + geom_text(aes(label=value), size = 3, fontface = "bold") + scale_fill_gradient2(low = "#67a9cf", high = "#ef8a62") +theme_minimal() +theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),  panel.border = element_blank(),panel.background = element_blank(), axis.title = element_blank(), axis.text = element_text(size = 12, face = "bold"))
+
+```
+
+Remove 1s
+
+```{r}
+dat2_cor_melt<-dat2_cor_melt[dat2_cor_melt$value!=1,]
+
+ggplot(dat2_cor_melt, aes(Var1, Var2)) + geom_tile(aes(fill = value)) + geom_text(aes(label=value), size = 3, fontface = "bold") + scale_fill_gradient2(low = "#67a9cf", high = "#ef8a62") +theme_minimal() +theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),  panel.border = element_blank(),panel.background = element_blank(), axis.title = element_blank(), axis.text = element_text(size = 12, face = "bold"))
+
+```
+
+Remove labels
+
+```{r}
+ggplot(dat2_cor_melt, aes(Var1, Var2)) + geom_tile(aes(fill = value)) + scale_fill_gradient2(low = "#67a9cf", high = "#ef8a62") +theme_minimal() +theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),  panel.border = element_blank(),panel.background = element_blank(), axis.title = element_blank(), axis.text = element_text(size = 12, face = "bold"))
+
+```
+
