@@ -4,11 +4,11 @@ PHC 6194 - Spatial Epidemiology (Spring 2021)
 ## About this Repository
 This repository contains student work completed for PHC 6194 Spatial Epidemiology taken in Spring of 2021 from Dr. Hui Hu (https://www.hui-hu.com) at the University of Florida. Course content is pulled from https://github.com/benhhu/PHC6194SPR2021 and stored with completed assignments in this repoistory. At the end of the semester, visibility of the repo will be changed to private. 
 
-## Repository Contents:
-`WK1` Week 1 Course content
-`LICENSE` Generic MIT licenses for open source projects from DrewC!
-`.gitattributes` File extensions marked for GH large file storage
-`README` Description, directory, notes
+## Repository Contents
+`WK1` Week 1 Course content<br>
+`LICENSE` Generic MIT licenses for open source projects from DrewC!<br>
+`.gitattributes` File extensions marked for GH large file storage<br>
+`README` Description, directory, notes<br>
 
 ## Repository Structure
 The repository uses the following file organization.
@@ -20,7 +20,7 @@ The repository uses the following file organization.
 `WK1` Course Overview, R Crash Course, Assignment 1
 
 ### Prefixes:
-`alpha_` First draft of script, continuting with greek alphabet
+`alpha_` First draft of script, continuting with greek alphabet<br>
 `omega_` Final draft of script
 `
 ### Suffixes:
