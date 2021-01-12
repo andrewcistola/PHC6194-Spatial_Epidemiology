@@ -10,8 +10,8 @@ This repository contains student work completed for PHC 6194 Spatial Epidemiolog
 `.gitattributes` File extensions marked for GH large file storage<br>
 `README` Description, directory, notes<br>
 
-## Repository Structure
-The repository uses the following file organization.
+## Style and Organization
+Code scripts use the following style and file organization:
 
 ### File Naming:
 `topic_prefix_suffix.ext`
@@ -31,14 +31,8 @@ The repository uses the following file organization.
 `_map` 2D geographic display<br>
 `_graph` 2D chart or graph representing numeric data
 
-## Style:
-Code scripts use the following style:
-
-### PEP-8
-Whenever possible code scripts follow PEP-8 standards. 
-
-### Elective options:
-Python and R code scripts use the following elective options:<br>
+### PEP-8:
+Whenever possible code scripts follow PEP-8 standards.Python and R code scripts use the following elective options:<br><br>
 `=` for variable defintions (no `<-`)<br>
 `''` for all character strings or arguments (no `""`) <br>
 A single space is provided between each element ex. `columns = 'COlA'`<br>
