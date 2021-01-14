@@ -46,14 +46,19 @@ Python and R code scripts use the following variable naming conventions:<br>
 `v_xx` R vectors<br>
 `a_xx` Numpy arrays<br>
 `m_xx` Numpy or R matrices<br>
-`df_X` feature tables <br>
-`df_Y` target tables <br>
+`p_xx` Matplotlib, ggplot, or R plots<br>
+Modles created with various methods are assigned informaitve short names:<br>
+`lin_xx`, `log_xx`, `forest_xx`, `rfe_xx`, `pca_xx`<br>
+Tables with features and targets used for modeling utilize standard names:<br>
+`df_X`, `df_Y`, `df_XY`<br>
+When using numbers, two digits are used by default (ex. `df_01`)
 
 ### PEP-8 Standards:
 Whenever possible code scripts follow PEP-8 standards<br>
 Wihtin these standards, scripts use the following elective options:<br>
 `=` for variable defintions (no `<-`)<br>
 `''` for all character strings or arguments (no `""`) <br>
+Arguments in a function are suuplied by name, rather than position (ex. `ggplot(data = df_XY, aes(x = ColX, y = ColY)`)<br>
 A single space is provided between each element (ex. `columns = 'ColA'`)<br>
 
 ## Disclaimer
