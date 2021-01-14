@@ -42,6 +42,7 @@ library(mapview) # Mapping library
 setwd("C:/Users/drewc/GitHub/Portfolio") # Set wd to project repository
 df_ = read.csv("_data/topic_sub_type.csv") # Import dataset from _data folder
 skim(df_) # Descritive statistics, dimensions, and missing values
+df_arst = data.frame(USArrests) # Save object as data frame
 
 ### Step 2: Prepare Data for Classificaiton
 
@@ -61,7 +62,7 @@ df_ = select(df_, -c(ColB, ColC, ColD)) # Remove variables similar to the outcom
 glimpse(df_) # Rows, columns, variable types and 10 
 summary(df_) # Descriptive statistics on each varibale
 skim(df_) # Descritive statistics, dimensions, and missing values
-head(df_) # Mini table with top 5 observations 
+head(df_) # Print mini table with first 6 observations 
 tail(df_) # Mini table with last 5 observations
 class(df_) # Type of object
 dim(df_) # Dimensions of data frame
@@ -75,6 +76,7 @@ df_purity_top <- df_[1:10, ] # Save first 10 observations of data frame
 df_ = df_[which(df_$ColA == "1" & df_$ColB > 2), ] # based on variable values
 df_$ColC[ColA == 1 | ColB == 2] <- 1 ) # Create new column based on conditions
 df_qual = subset(df_qual, select = -c(char_qual)) # Remove variables with high missing values
+df_arst$UrbanPopG = cut(df_arst$UrbanPop, breaks = quantile(df_arst$UrbanPop, probs = c(0,0.25,0.5,0.75,1)), include.lowest = T) # Create column of quantiles based on column
 
 ## Data Manipulation in tidyverse
 df = df %>% mutate_if(is.character, as.numeric) ## Change Characters to Numeric
