@@ -2,7 +2,7 @@
 PHC 6194 - Spatial Epidemiology (Spring 2021)
 
 ## About this Repository
-This repository contains student work completed for PHC 6194 Spatial Epidemiology taken in Spring of 2021 from Dr. Hui Hu (https://www.hui-hu.com) at the University of Florida. Course content is pulled from https://github.com/benhhu/PHC6194SPR2021 and stored with completed assignments in this repoistory. At the end of the semester, visibility of the repo will be changed to private. 
+This repository contains student work completed for PHC 6194 Spatial Epidemiology taken in Spring of 2021 from Dr. Hui Hu (https://www.hui-hu.com) at the University of Florida. Course content is pulled from https://github.com/benhhu/PHC6194SPR2021 and stored with completed assignments in this repoistory. At the end of the semester, visibility of the repo will be changed to private to protect answers from future students taking the course. 
 
 ## Directory
 `WK1` Week 1 Course content<br>
