@@ -1,5 +1,6 @@
 # title: Assignment 1: PHC 6194 - Spring 21
 ## author: Andrew S. Cistola MPH
+## date: 2021-01-14 17:17:11 EST
 
 ### Setup Workspace
 setwd('/home/drewc/GitHub/_colab/PHC6194/_student') # Set wd to project repository
