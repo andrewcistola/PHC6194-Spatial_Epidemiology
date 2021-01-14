@@ -40,7 +40,7 @@ Standard suffixes represent the following types of files:<br>
 
 ### Variable Names:
 Python and R code scripts use the following variable naming conventions:<br>
-`xx` = 2-6 letter abbrevation based on content within data object<br>
+`xx` 2-6 letter abbrevation based on content within data object<br>
 `df_xx` Pandas and R dataframes<br>
 `l_xx` Pandas and R lists<br>
 `v_xx` R vectors<br>
@@ -50,14 +50,11 @@ Python and R code scripts use the following variable naming conventions:<br>
 `df_Y` target tables <br>
 
 ### PEP-8 Standards:
-Whenever possible code scripts follow PEP-8 standards with the following elective options:<br>
-<br>
+Whenever possible code scripts follow PEP-8 standards<br>
+Wihtin these standards, scripts use the following elective options:<br>
 `=` for variable defintions (no `<-`)<br>
 `''` for all character strings or arguments (no `""`) <br>
-A single space is provided between each element ex. `columns = 'ColA'`<br>
+A single space is provided between each element (ex. `columns = 'ColA'`)<br>
 
 ## Disclaimer
-While the author (Andrew Cistola) is a Florida DOH employee and a University of Florida PhD student, these are NOT official publications by the Florida DOH, the University of Florida, or any other agency. 
-No information is included in this repository that is not available to any member of the public. 
-All information in this repository is available for public review and dissemination but is not to be used for making medical decisions. 
-All code and data inside this repository is available for open source use per the terms of the included license. 
+While the author (Andrew Cistola) is a Florida DOH employee and a University of Florida PhD student, these are NOT official publications by the Florida DOH, the University of Florida, or any other agency. All information in this repository is available for public review and dissemination but is not to be used for making medical decisions. All code and data inside this repository is available for open source use per the terms of the included license.
