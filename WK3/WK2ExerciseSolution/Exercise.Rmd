@@ -1,0 +1,185 @@
+---
+title: "Week 2 In-class Exercises"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup}
+knitr::opts_knit$set(root.dir="/home/vmuser/Desktop/PHC6194SPR2021/WK2/Exercise")
+```
+
+#Question 1
+
+###Use the files "Patient_Drug_Admin_Date.csv" and "Patient_Drug390_Test_Flag.csv". We would like to know whether length of treatment and the distribution of HR/HER2 status varies based on the drug that the patient is receiving (whether they are receiving drug 390 or not). Write codes to compare: 1) the length of treatment by drug (drug 390 vs. other), and 2) the HR/HER status distribution by drug (drug 390 vs. other).
+#### Assuming that the treatment length (unit: day) is determined by the length between the first admin_date and the last admin_date. For those with only one administer record, the length is therefore 0.
+#### Note that patients with breast cancer can be categorized into 4 groups, based on their HER2 status and HR status (i.e. HR+ if either ER or PR is positive, HR- if both ER and PR are negative)
+
+```{r}
+library("RPostgreSQL")
+
+#import data
+pdad<-read.csv("dat/Patient_Drug_Admin_Date.csv",sep = "\t", header=T, stringsAsFactors = F)
+pdtf<-read.csv("dat/Patient_Drug390_Test_Flags.csv",sep = "\t", header=T, stringsAsFactors = F)
+
+#convert chr to date
+pdad$Drug_admin_date<-as.Date(pdad$Drug_admin_date,format = "%m/%d/%y")
+
+#lower case colnames
+colnames(pdad)<-tolower(colnames(pdad))
+colnames(pdtf)<-tolower(colnames(pdtf))
+
+#import data to postgresql
+pw <- "vmuser"
+drv<-dbDriver("PostgreSQL")
+con<-dbConnect(drv,dbname="phc6194db",host="localhost",user="phc6194",password=pw)
+
+q<-"
+DROP SCHEMA IF EXISTS wk2ex CASCADE;
+CREATE SCHEMA wk2ex;
+"
+dbSendQuery(con,q)
+
+dbWriteTable(con,c("wk2ex","pdad"),pdad,row.names=F,append=F)
+dbWriteTable(con,c("wk2ex","pdtf"),pdtf,row.names=F,append=F)
+
+#add hr+
+q<-"
+ALTER TABLE wk2ex.pdtf
+ADD hr SMALLINT;
+
+UPDATE wk2ex.pdtf 
+  SET hr=
+    CASE WHEN er_positive=1 OR pr_positive=1 THEN 1
+       WHEN er_positive=0 AND pr_positive=0 THEN 0
+       ELSE NULL
+       END;
+"
+dbSendQuery(con,q)
+
+q<-"
+SELECT *
+FROM wk2ex.pdtf;
+"
+dbGetQuery(con,q)
+
+```
+
+```{r}
+#Question 1) generate length of treatment
+q<-"
+SELECT c.drug_390_admin_flag, AVG(c.length) as meanlength
+FROM
+(SELECT b.patient_id, b.length, wk2ex.pdtf.drug_390_admin_flag
+FROM
+(SELECT a.patient_id, a.max_date-a.min_date as length
+FROM
+(SELECT wk2ex.pdad.patient_id, MAX(wk2ex.pdad.drug_admin_date) as max_date, MIN(wk2ex.pdad.drug_admin_date) as min_date
+FROM wk2ex.pdad
+GROUP BY patient_id) as a) as b
+LEFT OUTER JOIN wk2ex.pdtf ON b.patient_id=wk2ex.pdtf.patient_id) as c
+GROUP BY c.drug_390_admin_flag
+;
+"
+dbGetQuery(con,q)
+```
+
+```{r}
+#Question 2) HR/HER status by Drug
+q<-"
+SELECT drug_390_admin_flag, her2_positive, hr, COUNT(patient_id)
+FROM wk2ex.pdtf
+GROUP BY drug_390_admin_flag, her2_positive, hr
+;
+"
+dbGetQuery(con,q)
+```
+
+#Question 2-1
+
+###Use the files "Patient_Doctor_Product_Month.csv" and "Site.csv". Write codes that would generate a table showing the market share of each product by State (of the addresses of the cancer centers - sites) for the year of 2012
+
+```{r}
+#import data
+pdpm<-read.csv("dat/Patient_Doctor_Product_Month.csv", header=T, stringsAsFactors = F)
+site<-read.csv("dat/Site.csv", header=T, stringsAsFactors = F)
+
+#lower case colnames
+colnames(pdpm)<-tolower(colnames(pdpm))
+colnames(site)<-tolower(colnames(site))
+
+#import data to postgresql
+dbWriteTable(con,c("wk2ex","pdpm"),pdpm,row.names=F,append=F)
+dbWriteTable(con,c("wk2ex","site"),site,row.names=F,append=F)
+
+#Get the results
+q<-"
+SELECT a.site_state, a.product_id, SUM(a.quantity) as quantity
+FROM
+(SELECT wk2ex.pdpm.*, wk2ex.site.site_state
+FROM wk2ex.pdpm
+LEFT OUTER JOIN wk2ex.site ON wk2ex.pdpm.site_id=wk2ex.site.site_id) as a
+WHERE a.month BETWEEN 201201 AND 201212
+GROUP BY a.site_state, a.product_id
+;
+"
+dbGetQuery(con,q)
+```
+
+#Question 2-2
+
+###Continuing from question 2-1, what if there are NULL values in the State field and everything else remains the same (use the "Site2.csv" instead of "Site.csv")?
+
+```{r}
+#import data
+site2<-read.csv("dat/Site2.csv", header=T, stringsAsFactors = F)
+
+#lower case colnames
+colnames(site2)<-tolower(colnames(site2))
+
+#import data to postgresql
+dbWriteTable(con,c("wk2ex","site2"),site2,row.names=F,append=F)
+
+#Get the results
+q<-"
+SELECT a.site_state, a.product_id, SUM(a.quantity) as quantity
+FROM
+(SELECT wk2ex.pdpm.*, wk2ex.site2.site_state
+FROM wk2ex.pdpm
+LEFT OUTER JOIN wk2ex.site2 ON wk2ex.pdpm.site_id=wk2ex.site2.site_id) as a
+WHERE a.month BETWEEN 201201 AND 201212
+GROUP BY a.site_state, a.product_id
+;
+"
+dbGetQuery(con,q)
+```
+
+#Question 2-3
+
+###Continuing from question 2-1, there is a concern that some doctors use certain products in this market in off-label manners and you are told to keep strictly only to the Diagnosis code of 162.9 in this market share analysis. Please write the codes which would include the revised definition (use the files "Patient_Doctor_Product_Month.csv", "Patient_Doctor_Month_Diagnosis.csv", and "Site.csv")
+
+```{r}
+#import data
+pdmd<-read.csv("dat/Patient_Doctor_Month_Diagnosis.csv", header=T, stringsAsFactors = F)
+
+#lower case colnames
+colnames(pdmd)<-tolower(colnames(pdmd))
+
+#import data to postgresql
+dbWriteTable(con,c("wk2ex","pdmd"),pdmd,row.names=F,append=F)
+
+#get the results
+q<-"
+SELECT a.site_state, a.product_id, SUM(a.quantity) as quantity
+FROM
+(SELECT wk2ex.pdpm.*, wk2ex.site.site_state, wk2ex.pdmd.diagnosis_code
+FROM wk2ex.pdpm
+LEFT OUTER JOIN wk2ex.site ON wk2ex.pdpm.site_id=wk2ex.site.site_id
+LEFT OUTER JOIN wk2ex.pdmd ON wk2ex.pdpm.patient_id=wk2ex.pdmd.patient_id AND wk2ex.pdpm.doctor_id=wk2ex.pdmd.doctor_id AND wk2ex.pdpm.month=wk2ex.pdmd.month) as a
+WHERE (a.month BETWEEN 201201 AND 201212) AND (a.diagnosis_code=162.9)
+GROUP BY a.site_state, a.product_id
+;
+"
+dbGetQuery(con,q)
+```
+

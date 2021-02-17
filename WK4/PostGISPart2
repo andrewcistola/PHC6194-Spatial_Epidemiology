@@ -1,0 +1,35 @@
+#Part 2
+#import shapefile to PostGIS using shp2pgsql
+#-s: SRID, -W: the encoding of dbf, -I: create a spatial index, -g: set the name of the geometry or geography column ("geom" or "geog" by default), -G: loads to the geography type instead of the geometry type (only if data is in 4326, but you can transform during the load by -G -s 26986:4326, assuming your data is in 26986)
+
+shp2pgsql -s 4269 -g geom_4269 -I -W "latin1" "tl_2012_us_state/tl_2012_us_state" wk4.tl_2012_state | psql -h localhost -U phc6194 -d phc6194db
+
+#import raster data to PostGIS using raster2pgsql
+#-s: SRID, -t: tile size, -R: registers the raster as an out-of-db raster, -F: adds a column with the filename of the raster, -n: column name, -l: overview factor, -I: create index, -C: sets the standard set of constraints, -e: execute each statement individually and doesn't use a transaction, -G: prints the supported GDAL raster formats
+
+#load a single raster
+raster2pgsql -s 4326 -C elevationSingleRaster/N48E086.hgt wk4.elevation | psql -h localhost -U phc6194 -d phc6194db
+
+#load multiple rasters
+raster2pgsql -s 4326 -C -F -t 100x100 elevationMultipleRasters/*.hgt wk4.elevation2 | psql -h localhost -U phc6194 -d phc6194db
+
+#load sql data dumps
+sudo -u postgres psql -d phc6194db -f wk4_sqldata1.sql
+sudo -u postgres psql -d phc6194db -f wk4_sqldata2.sql
+
+#check if data are successfully imported
+psql -h localhost -U phc6194 phc6194db
+\dt wk4.*
+
+
+
+
+
+
+
+
+
+
+
+
+

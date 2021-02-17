@@ -76,5 +76,5 @@ df_Q10 = subset(df_Q10, value < 1) # Subset data frame by multiple column values
 ggplot(df_Q10, aes(Var1, Var2)) + geom_tile(aes(fill = value)) + geom_text(aes(label = value), size = 3, fontface = "bold") + scale_fill_gradient2(low = "#67a9cf", high = "#ef8a62") +theme_minimal() +theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),  panel.border = element_blank(),panel.background = element_blank(), axis.title = element_blank(), axis.text = element_text(size = 12, face = "bold")) # Create correplation heatmap with formatting/style options
 ```
 
-This file can be viewed at: https://github.com/andrewcistola/PHC6194_student/_code/A01_code.html<br>
+This file can be viewed at: https://github.com/andrewcistola/PHC6194_student<br>
 © Andrew S Cistola MPH

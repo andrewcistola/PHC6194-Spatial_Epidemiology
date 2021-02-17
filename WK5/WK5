@@ -1,0 +1,76 @@
+#enable the PostGIS TIGER geocoder
+sudo -u postgres psql -c "CREATE EXTENSION fuzzystrmatch; CREATE EXTENSION postgis_tiger_geocoder; CREATE EXTENSION address_standardizer;" phc6194db
+
+#grant permissions to TIGER
+sudo -u postgres psql -c "GRANT USAGE ON SCHEMA tiger TO PUBLIC; GRANT USAGE ON SCHEMA tiger_data TO PUBLIC; GRANT SELECT, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA tiger TO PUBLIC; GRANT SELECT, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA tiger_data TO PUBLIC; GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA tiger TO PUBLIC; ALTER DEFAULT PRIVILEGES IN SCHEMA tiger_data GRANT SELECT, REFERENCES ON TABLES TO PUBLIC;" phc6194db
+
+#create a folder which will store all the TIGER data
+sudo mkdir /gisdata
+sudo mkdir /gisdata/temp
+sudo chmod -R a+rwx /gisdata
+
+#generate nationscript
+psql -h localhost -U phc6194 phc6194db
+\t
+\a
+\o /gisdata/nationscript.sh
+SELECT loader_generate_nation_script('sh');
+\o
+\q
+
+#set password for the user postgres
+sudo -u postgres psql postgres
+\password postgres
+#now enter the password: vmuser
+\q
+
+#revise the script to set correct db and password
+cd /gisdata
+gedit nationscript.sh
+
+#now change the following lines:
+export PGPASSWORD=vmuser
+export PGDATABASE=phc6194db
+
+#execute the nationscript
+sudo chmod -R a+rwx /gisdata
+sudo ./nationscript.sh
+
+#check if the tiger data are downloaded
+psql -h localhost -U phc6194 phc6194db
+\dt tiger_data.*
+\q
+
+#let's now load the state-level data for FL
+psql -h localhost -U phc6194 phc6194db
+\t
+\a
+\o /gisdata/statescript.sh
+SELECT loader_generate_script(ARRAY['FL'],'sh');
+\o
+\q
+
+#revise the script to set correct db and password
+cd /gisdata
+sudo chmod -R a+rwx /gisdata
+gedit statescript.sh
+
+#now change the following lines:
+export PGPASSWORD=vmuser
+export PGDATABASE=phc6194db
+
+#we only want to download data for Alachua County
+#let's delete all the other counties, and only keep 12001
+
+#execute the nationscript
+sudo ./statescript.sh
+
+#to ensure all the indexes needed by the geocoder functions are in place
+sudo -u postgres psql -c "SELECT install_missing_indexes();" phc6194db
+
+
+
+
+
+
+

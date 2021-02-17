@@ -1,0 +1,25 @@
+#Part 1
+#enable the PostGIS extension
+sudo -u postgres psql -c "CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology;" phc6194db
+
+# confirm that PostGIS extension is enabled
+sudo -u postgres psql -c "SELECT postgis_full_version();" phc6194db
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

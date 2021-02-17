@@ -1,0 +1,107 @@
+#create a new user "phc6194" with password "vmuser"
+sudo -u postgres createuser -P phc6194
+
+#create a database "phc6194spr19db" and allow user "phc6194" to access it
+sudo -u postgres createdb -O phc6194 phc6194db
+
+#connect to postgresql as user "phc6194" and access the database "phc6194db"
+psql -h localhost -U phc6194 phc6194db
+
+#show all the databases (press "q" to exit the view)
+phc6194db=> \l
+
+#show all the schemas in the current database
+phc6194db=> \dn
+
+#show all the tables in the current database
+phc6194db=> \dt
+
+#Create a table called testtbl
+phc6194db=> CREATE TABLE testtbl(
+   	 -> id SERIAL PRIMARY KEY,
+   	 -> title VARCHAR(100) NOT NULL,
+   	 -> author VARCHAR(40) NOT NULL,
+   	 -> date DATE
+   	 -> );
+
+#Check if the table is created
+phc6194db=> \dt
+
+#Check if there is any data inside this table
+phc6194db=> SELECT * FROM testtbl;
+
+#Insert some data (one row) to the table
+phc6194db=> INSERT into testtbl(title,author,date)
+   	 -> VALUES ('title 1','author 1','2018-01-21');
+
+#Check if there is any data inside this table again
+phc6194db=> SELECT * FROM testtbl;
+
+#Insert another row to the table
+phc6194db=> INSERT into testtbl(title,author,date)
+    	 -> VALUES ('title 2','author 2','2018-02-21');
+
+#Let's check how the table looks like
+phc6194db=> SELECT * FROM testtbl;
+
+#What if we only insert data for the columns "title"?
+phc6194db=> INSERT into testtbl(title)
+         -> VALUES ('title 3');
+
+#We got an error, because we specifically defined that author cannot be null. Let's try this instead
+phc6194db=> INSERT into testtbl(title,author)
+	 -> VALUES ('title 3','author 3');
+
+#check the table again
+phc6194db=> SELECT * FROM testtbl;
+
+#how to insert multiple rows?
+phc6194db=> INSERT into testtbl(title,author)
+	 -> VALUES 
+	 -> ('title 4','author 4'),
+	 -> ('title 5','author 5'),
+	 -> ('title 6','author 6'),
+	 -> ('title 7','author 7')
+	 -> ;
+
+#check the table again
+phc6194db=> SELECT * FROM testtbl;
+
+#export a single table
+phc6194db=> \copy testtbl to 'testtbl'
+
+#export it as a csv file
+phc6194db=> \copy testtbl to 'testtbl.csv' CSV
+
+#delete the table
+phc6194db=> DROP TABLE testtbl;
+
+#import the exported table
+phc6194db=> CREATE TABLE testtbl(
+   	      -> id SERIAL PRIMARY KEY,
+   	      -> title VARCHAR(100) NOT NULL,
+   	      -> author VARCHAR(40) NOT NULL,
+   	      -> date DATE
+   	      -> );
+
+phc6194db=> \copy testtbl FROM 'testtbl.csv' DELIMITER ',' CSV
+
+#export a postgresql database 
+#Quit the postgresql prompt first
+phc6194db=> \q
+
+#export the database as "phc6194db.bak"
+sudo -u postgres pg_dump -Fc phc6194db > phc6194db.bak  
+
+#delete the database
+sudo -u postgres dropdb phc6194db
+
+#restore the database
+sudo -u postgres createdb -O phc6194 phc6194db
+sudo -u postgres pg_restore -d phc6194db phc6194db.bak
+
+#check
+psql -h localhost -U phc6194 phc6194db
+phc6194db=> SELECT * FROM testtbl;
+
+#we will now use an R package to connect to Postgresql so that we can do all the coding within R

@@ -68,6 +68,7 @@ class(df_) # Type of object
 dim(df_) # Dimensions of data frame
 ncol(df_) # Number of columns
 nrow(df_) # Number of rows
+str(dat) # Show structure of dataframe
 
 ### Section B: Data Manipulation Quick Scripts
 

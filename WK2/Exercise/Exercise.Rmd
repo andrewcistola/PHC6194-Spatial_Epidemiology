@@ -1,0 +1,41 @@
+---
+title: "Week 2 In-class Exercises"
+output:
+  html_document:
+    df_print: paged
+---
+
+#Question 1
+
+###Use the files "Patient_Drug_Admin_Date.csv" and "Patient_Drug390_Test_Flag.csv". We would like to know whether length of treatment and the distribution of HR/HER2 status varies based on the drug that the patient is receiving (whether they are receiving drug 390 or not). Write codes to compare: 1) the length of treatment by drug (drug 390 vs. other), and 2) the HR/HER status distribution by drug (drug 390 vs. other).
+#### Assuming that the treatment length (unit: day) is determined by the length between the first admin_date and the last admin_date. For those with only one administer record, the length is therefore 0.
+#### Note that patients with breast cancer can be categorized into 4 groups, based on their HER2 status and HR status (i.e. HR+ if either ER or PR is positive, HR- if both ER and PR are negative)
+
+```{r}
+
+```
+
+#Question 2-1
+
+###Use the files "Patient_Doctor_Product_Month.csv" and "Site.csv". Write codes that would generate a table showing the market share of each product by State (of the addresses of the cancer centers - sites) for the year of 2012
+
+```{r}
+
+```
+
+#Question 2-2
+
+###Continuing from question 2-1, what if there are NULL values in the State field and everything else remains the same (use the "Site2.csv" instead of "Site.csv")?
+
+```{r}
+
+```
+
+#Question 2-3
+
+###Continuing from question 2-1, there is a concern that some doctors use certain products in this market in off-label manners and you are told to keep strictly only to the Diagnosis code of 162.9 in this market share analysis. Please write the codes which would include the revised definition (use the files "Patient_Doctor_Product_Month.csv", "Patient_Doctor_Month_Diagnosis.csv", and "Site.csv")
+
+```{r}
+
+```
+
