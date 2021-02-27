@@ -220,6 +220,8 @@ df_d2_4 = df_d2_API.set_index(['GEO_ID', 'state', 'zip code tabulation area', 'N
 df_d2_4.head() # Print first 5 observations
 df_d2_4.info() # Get class, memory, and column info: names, data types, obs.
 
+# 02-27-2021 DC!
+
 ### Merge query results, tidy data
 df_d2 = pd.merge(df_d2_1, df_d2_2, how = "inner", left_index = True, right_index = True) # Join by column while keeping only items that exist in both, select outer or left for other options
 df_d2 = pd.merge(df_d2, df_d2_3, on = index, how = "inner") # Join by column while keeping only items that exist in both, select outer or left for other options
