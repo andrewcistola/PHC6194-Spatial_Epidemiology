@@ -89,17 +89,11 @@ f1 = 'CENSUS_ACS_2019_ZCTA5' # Dataset 2 file label
 ### Dataset 1 API Query (CSV)
 query_d1 = ("https://chronicdata.cdc.gov/resource/kee5-23sr.csv?"
     "&$$app_token=YmHGXtIwwRViIV4urwHNCAv0h"
-    "&$limit=40000")
-df_d1_API = pd.read_csv(query_d1)
+    "&$limit=40000") # Save API as query
+df_d1_API = pd.read_csv(query_d1) # Create data frame from APi query
+df_d1_API.to_sql((f1 + '_raw'), sql, if_exists = 'replace', index = False) # Export data farme to SQl table
 df_d1_API.head() # Print first 5 observations
 df_d1_API.info() # Get class, memory, and column info: names, data types, obs.
-
-
-
-
-### Conenct to database
-con = sqlite3.connect('hnb/_database/HNB.db')
-df_DP.to_sql('ACS_DP5Y2018_ZCTA', sql, if_exists='replace', index = False)
 
 ### Keep Values of Interest
 df_d1 = df_d1_API.set_index('zcta5') # Set column as index
@@ -116,13 +110,10 @@ df_l1 = df_l1.set_axis(['Description', 'Feature', 'Label'], axis = 1)
 df_l1 = df_l1.astype('str') # Change data type of column in data frame
 df_l1['Feature'] = 'D1_' + df_l1['Feature'] # Append string to all rows in column
 df_l1['Description'] = 'CDC_PLACES_2020_' + df_l1['Label'] # Append string to all rows in column
+df_l1 = df_l1.set_index('Feature') # Set column as index
+df_l1.to_sql((f1 + '_labels'), sql, if_exists = 'replace', index = 'Feature') # Export dataframe to SQL database
 df_l1.head() # Print first 5 observations
 df_l1.info() # Get class, memory, and column info: names, data types, obs.
-
-### Export Labels
-df_l1 = df_l1.set_index('Feature') # Set column as index
-df_l1.to_csv(r"_colab/PHC6194/_final/_labels/CDC_PLACES_2020_ZCTA5_labels.csv") # Export df as csv
-df_l1 = df_l1.reset_index() # Set column as index
 
 ### Create Standard Column Names
 df_d1['zcta5'] = df_d1['zcta5'].astype('str') # Change data type of column in data frame
@@ -130,7 +121,9 @@ df_d1['zcta5'] = df_d1['zcta5'].str.rjust(5, "0") # add leading zeros of charact
 df_d1 = df_d1.transpose() # Transpose Rows and Columns
 df_d1 = df_d1.reset_index() # Set observatyion label column as index
 df_d1 =  df_d1.rename(columns = {'index': 'Label'}) # Rename multiple columns in place
+df_l1 = df_l1.reset_index() # Set observatyion label column as index
 df_d1 = pd.merge(df_l1, df_d1, on = "Label", how = "inner") # Join by column while keeping only items that exist in both, select outer or left for other options
+df_l1 = df_l1.set_index('Feature') # Set column as index
 df_d1 = df_d1.drop(columns = ['Label', 'Description']) # Drop Unwanted Columns
 df_d1 = df_d1.set_index('Feature') # Set column as index
 df_d1 = df_d1.transpose() # Transpose Rows and Columns
@@ -139,14 +132,12 @@ df_d1['ZCTA'] = 'ZCTA' + df_d1['ZCTA']
 df_d1 = df_d1.set_index('ZCTA') # Set column as index
 df_d1 = df_d1.apply(pd.to_numeric, errors = "coerce") # Convert all columns to numeric
 df_d1.columns.name = None
+df_d1.to_sql((f1 + '_stage'), sql, if_exists = 'replace', index = 'ZCTA') # Export dataframe to SQL database
 df_d1.head() # Print first 5 observations
 df_d1.info() # Get class, memory, and column info: names, data types, obs.
 
-### Export staged data to csv
-df_d1.to_csv(r"_colab/PHC6194/_final/_data/CDC_PLACES_2020_ZCTA5_stage.csv") # Export df as csv
-
 ### Append step 1 results to corresponding text file
-text_file = open(path + name + '_' + day + '.txt', 'a') # Open corresponding text file
+text_file = open(path_name + '.txt', 'a') # Open corresponding text file
 text_file.write(s1 + '\n\n') # Step description
 text_file.write(d1 + '\n\n') # Dataset description
 text_file.write(f1 + '\n\n') # Filename description
@@ -159,13 +150,18 @@ text_file.close() # Close file
 ## Step 2: Pull 2nd Dataset from API
 s2 = 'Step 2: Pull and Clean Second Datasource from API' # Step 2 descriptive title
 d2 = 'Dataset: CENSUS ACS 2020 Release by Zip Code' # Dataset 2 descriptive title
-f2 = 'Filename: CENSUS_ACS_2019_ZCTA5' # Dataset 2 file label
+f2 = 'CENSUS_ACS_2019_ZCTA5' # Dataset 2 file label
 
 ### Dataset 2 Create Multiple API Queries (JSON), Query 1
 query_d2_1 = ("https://api.census.gov/data/2019/acs/acs5/profile?get=group(DP02)"
     "&for=zip%20code%20tabulation%20area"
     "&key=c82350b0bbe6c8a46ce163365ee3f2abcd16253e") # Save API query
-df_d2_API = pd.read_json(query_d2_1) # Query data with pandas
+df_d2_API = pd.read_json(query_d2_1) ) # Create data frame from APi query
+df_d2_API.to_sql((f2 + 'DP02_raw'), sql, if_exists = 'replace', index = False) # Export data farme to SQl table
+df_d2_API.head() # Print first 5 observations
+df_d2_API.info() # Get class, memory, and column info: names, data types, obs.
+
+### Keep Values of Interest, Query 1
 df_d2_API.columns = df_d2_API.iloc[0] # Save firts row as column names
 df_d2_API = df_d2_API.iloc[1:] # Remove first row
 df_d2_API.columns.name = None # Remove label for column names
@@ -178,6 +174,11 @@ query_d2_2 = ("https://api.census.gov/data/2019/acs/acs5/profile?get=group(DP03)
     "&for=zip%20code%20tabulation%20area"
     "&key=c82350b0bbe6c8a46ce163365ee3f2abcd16253e")
 df_d2_API = pd.read_json(query_d2_2)
+df_d2_API.to_sql((f2 + 'DP03_raw'), sql, if_exists = 'replace', index = False) # Export data farme to SQl table
+df_d2_API.head() # Print first 5 observations
+df_d2_API.info() # Get class, memory, and column info: names, data types, obs.
+
+### Keep Values of Interest, Query 2
 df_d2_API.columns = df_d2_API.iloc[0] # Save firts row as column names
 df_d2_API = df_d2_API.iloc[1:] # Remove first row
 df_d2_API.columns.name = None # Remove label for column names
@@ -190,6 +191,11 @@ query_d2_3 = ("https://api.census.gov/data/2019/acs/acs5/profile?get=group(DP04)
     "&for=zip%20code%20tabulation%20area"
     "&key=c82350b0bbe6c8a46ce163365ee3f2abcd16253e")
 df_d2_API = pd.read_json(query_d2_3)
+df_d2_API.to_sql((f2 + 'DP04_raw'), sql, if_exists = 'replace', index = False) # Export data farme to SQl table
+df_d2_API.head() # Print first 5 observations
+df_d2_API.info() # Get class, memory, and column info: names, data types, obs.
+
+### Keep Values of Interest, Query 3
 df_d2_API.columns = df_d2_API.iloc[0] # Save firts row as column names
 df_d2_API = df_d2_API.iloc[1:] # Remove first row
 df_d2_API.columns.name = None # Remove label for column names
@@ -202,6 +208,11 @@ query_d2_4 = ("https://api.census.gov/data/2019/acs/acs5/profile?get=group(DP05)
     "&for=zip%20code%20tabulation%20area"
     "&key=c82350b0bbe6c8a46ce163365ee3f2abcd16253e")
 df_d2_API = pd.read_json(query_d2_4)
+df_d2_API.to_sql((f2 + 'DP05_raw'), sql, if_exists = 'replace', index = False) # Export data farme to SQl table
+df_d2_API.head() # Print first 5 observations
+df_d2_API.info() # Get class, memory, and column info: names, data types, obs.
+
+### Keep Values of Interest, Query 4
 df_d2_API.columns = df_d2_API.iloc[0] # Save firts row as column names
 df_d2_API = df_d2_API.iloc[1:] # Remove first row
 df_d2_API.columns.name = None # Remove label for column names
@@ -232,11 +243,9 @@ df_l2 = df_l2.set_axis(['Description', 'Feature', 'Label'], axis = 1)
 df_l2 = df_l2.astype('str') # Change data type of column in data frame
 df_l2['Feature'] = 'D2_' + df_l2['Feature'] # Append string to all rows in column
 df_l2['Description'] = 'CENSUS_ACS_2019_' + df_l2['Label'] # Append string to all rows in column
+df_l2.to_sql((f2 + '_labels'), sql, if_exists = 'replace', index = False) # Export data farme to SQl table
 df_l2.head() # Print first 5 observations
 df_l2.info() # Get class, memory, and column info: names, data types, obs.
-
-### Export Labels
-df_l2.to_csv(r"_colab/PHC6194/_final/_labels/CENSUS_ACS_2019_ZCTA5_labels.csv") # Export df as csv
 
 ### Create Standard Column Names
 df_d2['NAME'] = df_d2['NAME'].astype('str') # Change data type of column in data frame
@@ -252,11 +261,9 @@ df_d2 = df_d2.rename(columns = {'D2_3': 'ZCTA'}) # Rename multiple columns in pl
 df_d2 = df_d2.set_index('ZCTA') # Set column as index
 df_d2 = df_d2.drop(columns = ['D2_0', 'D2_1', 'D2_2']) # Drop Unwanted Columns
 df_d2.columns.name = None
+df_d2.to_sql((f2 + '_stage'), sql, if_exists = 'replace', index = False) # Export data farme to SQl table
 df_d2.head() # Print first 5 observations
 df_d2.info() # Get class, memory, and column info: names, data types, obs.
-
-### Export staged data to csv
-df_d2.to_csv(r"_colab/PHC6194/_final/_data/CENSUS_ACS_2019_ZCTA5_stage.csv") # Export df as csv
 
 ### Append step 2 results to corresponding text file
 text_file = open(path + name + '_' + day + '.txt', 'a') # Open corresponding text file
