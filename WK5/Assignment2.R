@@ -22,32 +22,52 @@ dat = subset(dat, select = -c(id))
 pw = "vmuser" # save the password
 drv = dbDriver("PostgreSQL") # load the postgresql driver
 con = dbConnect(drv, dbname = "phc6194db", host = "localhost", user = "phc6194", password = pw) # create a connection to the postgres database
-dbWriteTable(con, 'wk5.dat', dat, row.names = FALSE, append = TRUE) # Export R dataframe to SQL database
+dbWriteTable(con, 'wk5', dat, row.names = FALSE, append = TRUE) # Export R dataframe to SQL database
 
 #Q5. Print out the first 6 rows of "wk5.dat" using a SQL query. (1 pt)
-dbReadTable(con, 'wk5.dat')
-dbGetQuery(con,'SELECT * FROM wk5.dat')
+dbReadTable(con, 'wk5')
+dbGetQuery(con, 'SELECT * FROM wk5 LIMIT 6')
 
 #################################################
 #Part 2. Geocoding Using TIGER Geocoder (15 pts)#
 #################################################
 
 #Q6. Add three new columns to "wk5.dat": "rating_tiger" (type: integer), "norm_address_tiger" (type:text), and "pt_tiger" (type:geometry), which will be used to store the rating of the geocoding (use -1 to replace missing values), the normalized address, and the geometry of the geocoded location. Print out the first 6 rows of "wk5.dat" to check. (5 pts)
-
-
-
+q = 
+'ALTER TABLE wk5 
+ADD COLUMN rating_tiger INT, 
+ADD COLUMN norm_address_tiger VARCHAR(20), 
+ADD COLUMN pt_tiger POLYGON;'
+dbSendQuery(con,q)
+dbGetQuery(con, 'SELECT * FROM wk5 LIMIT 6')
 
 #Q7. Batch geocoding "address" in "wk5.dat" using TIGER geocoder. Add three additional columns to the table: Please use a batch size=50. (8 pts)
 
+q<-"
+UPDATE wk5
+SET (rating_tiger, norm_address_tiger, pt_tiger) = (COALESCE((g).rating,-1),pprint_addy((g).addy), (g).geomout)
+FROM
+  (SELECT * FROM wk5 WHERE rating_tiger IS NULL LIMIT 50) AS a
+  LEFT JOIN
+  (SELECT address, geocode(address,1) AS g FROM wk5 AS ag WHERE rating IS NULL) AS g1
+  ON a.addid = g1.addid
+WHERE a.address=wk5.address;
+"
+dbSendQuery(con,q)
+
 #Q8. Print out the first 6 rows with all the columns as well as lon (name it as "lon_tiger") and lat (name it as "lat_tiger") of "pt_tiger". (2 pts)
+dbGetQuery(con, 'SELECT * FROM wk5 LIMIT 6')
 
 ###########################################################
 #Part 3. Geocoding Using Google Map Geocoding API (15 pts)#
 ###########################################################
 
 #Q9. Now let's perform the geocoding using google map geocoding api through ggmap. Set the api key first. (2 pts)
+register_google(key = '')
+
 
 #Q10. Define the getGeoDetails() function. (1 pt)
+geocode(wk5$address)
 
 #Q11. Perform geocoding with a batch size=10. All temporary results should be saved in the "data" folder: e.g. "_temp_geocoded_dat_1.rds" for the first batch. (7 pts)
 
