@@ -1,0 +1,14 @@
+####################
+
+Title: UF PHC6194 SPR2021 Final Project- Ecological Factors Associated with Self-Reported Mental Health by Zip Code
+Author(s): Andrew S. Cistola, MPH; Alyssa Berger, MPH
+Address: https://github.com/andrewcistola/PHC6194
+
+File Name: PHC6194_FINAL_mh_v1-2
+Relative Path: PHC6194/FINAL/
+Local Path: /home/drewc/GitHub/
+
+Time Run: 2021-02-27 12:22:42.526714
+
+####################
+

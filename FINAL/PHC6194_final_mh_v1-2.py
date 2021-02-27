@@ -2,7 +2,7 @@
 
 ## Script Metadata
 title = 'UF PHC6194 SPR2021 Final Project' # Input basic title
-descriptive = ': Ecological Factors Associated with Self-Reported Mental Health by Zip Code' # Input descriptive title
+descriptive = '- Ecological Factors Associated with Self-Reported Mental Health by Zip Code' # Input descriptive title
 author = 'Andrew S. Cistola, MPH; Alyssa Berger, MPH' # Input author information
 GH = 'https://github.com/andrewcistola/PHC6194' # Input GitHub repository
 
@@ -13,8 +13,7 @@ repo = 'PHC6194/' # Input repository filename
 
 ## Local Script Variables
 user = 'Andrew S. Cistola, MPH; https://github.com/andrewcistola' # Input name and GitHub profile of user
-relative = '_colab/' # Input relative path from directory to repository
-directory = '/home/drewc/GitHub/' # Input local path to working directory
+local = '/home/drewc/GitHub/' # Input local path to repository
 
 ## Import python libraries
 import os # Operating system navigation
@@ -63,22 +62,21 @@ day = '_' + str(date.today()) # Save date stamp for use in file names
 stamp = str(datetime.now()) # Save full timestamp for output files
 
 ## Set Directory
-os.chdir(directory) # Set wd to local directory
-path = relative + repo + project + name + day # Save full path from local directory with filename for use in output files associated with the script
+os.chdir(local) # Set wd as local path to repository
+path_name = local + repo + project + name + day # Save full path for use in output files associated with the script
 
 ## Create Local Database
-sql = sqlite3.connect(path + '.db') # Create local database file
+sql = sqlite3.connect(path_name + '.db') # Create local database file
 
 ### Write corresponding text file for collecting results
-text_file = open(path + '.txt', 'w') # Write new corresponding text file
+text_file = open(path_name + '.txt', 'w') # Write new corresponding text file
 text_file.write('####################' + '\n\n') # Add section break for end of step
-text_file.write('Title: ' + title + '\n') # Script title
-text_file.write('Author: ' + author + '\n') # Script Author
-text_file.write('Generic File Name: ' + name + '\n') # Script Author
-text_file.write('Project path: ' + project + '\n') # Script Author
-text_file.write('GitHub Repository: ' + repo + '_data.py' + '\n') # Filename of script
-text_file.write('Realtive Path: ' + relative + '\n') # Relative path to script
-text_file.write('Local Directory: ' + directory + '\n') # Directory used for script run
+text_file.write('Title: ' + title + descriptive + '\n') # Script title
+text_file.write('Author(s): ' + author + '\n') # Script Author
+text_file.write('Address: ' + GH + '\n\n') # Script Author
+text_file.write('File Name: ' + name + '\n') # Script Author
+text_file.write('Relative Path: ' + repo + project + '\n') # Script Author
+text_file.write('Local Path: ' + local + '\n\n') # Directory used for script run
 text_file.write('Time Run: ' + stamp + '\n') # Timestamp of script run
 text_file.write('\n' + '####################' + '\n\n') # Add section break for end of step
 text_file.close() # Close file
@@ -96,12 +94,12 @@ df_d1_API = pd.read_csv(query_d1)
 df_d1_API.head() # Print first 5 observations
 df_d1_API.info() # Get class, memory, and column info: names, data types, obs.
 
+
+
+
 ### Conenct to database
 con = sqlite3.connect('hnb/_database/HNB.db')
 df_DP.to_sql('ACS_DP5Y2018_ZCTA', sql, if_exists='replace', index = False)
-
-
-
 
 ### Keep Values of Interest
 df_d1 = df_d1_API.set_index('zcta5') # Set column as index
