@@ -57,15 +57,15 @@ from keras.models import Model # Uses a more complex method for building layers 
 from keras.layers import Dense # Used for creating dense fully connected layers
 from keras.layers import Input # Used for designating input layers
 
+## Set Working Directory
+os.chdir(local) # Set wd as local path to repository
+path_name = local + repo + project + name + day # Save full path for use in output files associated with the script
+
 ## Create Timestamps
 day = '_' + str(date.today()) # Save date stamp for use in file names
 stamp = str(datetime.now()) # Save full timestamp for output files
 
-## Set Directory
-os.chdir(local) # Set wd as local path to repository
-path_name = local + repo + project + name + day # Save full path for use in output files associated with the script
-
-## Create Local Database
+## Connect to Local Database
 sql = sqlite3.connect(path_name + '.db') # Create local database file
 
 ### Write corresponding text file for collecting results
@@ -165,7 +165,7 @@ df_d2_API.info() # Get class, memory, and column info: names, data types, obs.
 df_d2_API.columns = df_d2_API.iloc[0] # Save firts row as column names
 df_d2_API = df_d2_API.iloc[1:] # Remove first row
 df_d2_API.columns.name = None # Remove label for column names
-df_d2_1 = df_d2_API.set_index(['GEO_ID', 'state', 'zip code tabulation area', 'NAME']) # Drop Unwanted Columns
+df_d2_1 = df_d2_API.set_index(['GEO_ID', 'state', 'zip code tabulation are-a', 'NAME']) # Drop Unwanted Columns
 df_d2_1.head() # Print first 5 observations
 df_d2_1.info() # Get class, memory, and column info: names, data types, obs.
 

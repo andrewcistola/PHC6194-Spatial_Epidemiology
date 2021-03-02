@@ -1,0 +1,53 @@
+#Visualization in QGIS
+#start qgis: type the following command in the terminal.
+qgis
+
+#right click PostGIS, and click on "New Connection". Enter the following information:
+Name: give it a name, e.g. "phc6194"
+Host: localhost
+Database: phc6194db
+Username: phc6194
+Password: vmuser
+
+#you can now test the connection. Please also enable "Also list tables with no geometry" to access non-spatial data
+
+#click on "OK" to establish the connection. We will now see the schemas and tables in the database
+
+#Option 1: for those of you who have already finished Assignment 2
+#Let's start by making a census block group map overlaid with the schools and publix we geocoded last week: right click on "flbg" and "school.pt_ggmap" in the "wk5" schema, and then click on "Add Layer"
+
+#Option 2: for those of you who haven't done Assignment 2
+#Navigate to the "data" folder in "WK6", and add the geojson files
+
+#Now let's only keep the geometries for alachua county. We can do this by right click on the layer "flbg" and then click on "filter". We can now provide a specific filter expression: "countyfp" = '001'
+
+#Let's now change the color of block groups based on values of a variable. Double click on the layer "flbg". The default uses "Single symbol", let's try "Graduated". We can now pick a column: e.g. "aland" which shows the area of the land, and we can customize the color ramp. In the mode, you can choose different ways to categorize the continuous values. Let's try quantile with 5 classes. Click on "OK".
+
+#Let's now change the marker of schools. Double click on the layer "school.pt_ggmap". Let's pick a new marker, e.g. the "star" marker. Click on "OK". You might need to re-order the layers to see them. 
+
+#Usually it's helpful to have a street map or satelitte image as the background of the map. Before this, we can firstly change the opacity of "flbg" (i.e. go to Symbology->layer rendering->opacity, you can set it to 50). 
+
+#Now, let's add a street map using Openlayers plugin. Click on "Plugins"->"Manage and Install Plugins". Then search for "quickmapservices". Click on "Install plugin". After installation finishes, click on "Close". Now go to "Web"->"QuickMapServices" and let's add a map from OSM (OpenStreetMap). You might need to re-order the layers to see it. 
+
+#Now, let's output this map as an image. Go to "Project"->"New Print Layout". Give a name to the layout. We can now click on "Add Map", and add the map to it. Let's then "Add Legend". Uncheck the "Auto update" box (Item Properties->Legend Items), and we can rename the items and remove some items (e.g. OSM). We can also uncheck the "Background" box to make it transparent. Let's now add a north arrow: click on "Add Image", and then go to "Search directories", pick a north arrow image. We can also add a scale bar.
+
+#We are now ready to export this as an image: "Composer"->"Export as Image", and save this as "alachua.png" in the "WK6" folder.
+
+#We can now save the projects in case we will make any further changes in the future: save it as "alachua.qgs" in the "WK6" folder.
+
+
+#Visualizations in Carto
+#Sign up a free student account at https://carto.com/students-access/
+
+#Now we can upload these geojson files to Carto. We can then create maps.
+
+
+
+
+
+
+
+
+
+
+
