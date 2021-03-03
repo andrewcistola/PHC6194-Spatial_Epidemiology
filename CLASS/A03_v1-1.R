@@ -245,11 +245,21 @@ alachuabg = flbg[flbg$countyfp == "001"] # based on variable values
 
 #Q7. Please make a map using "alachuabg", "publix", and "school" using ggmap, ggplot2, and ggsn packages in R. Please try to make it look as similar as you can to the example attached on canvas (colors do not need to be the same). (25 pts) 
 
-map1<-ggplot()+geom_polygon(data=flbg_f,aes(long,lat,group=group,fill=aland,alpha=0.3))+geom_path(color="white")+coord_equal()+theme(panel.background=element_blank(),axis.title=element_blank(),axis.text=element_blank(),axis.ticks = element_blank())+scale_fill_gradientn("Land Area",colours=c("#DFEBF7","#11539A"))
+
+map1<-ggplot()+geom_polygon(data=alachuabg,aes(long,lat,group=group,fill=aland,alpha=0.3))+geom_path(color="white")+coord_equal()+theme(panel.background=element_blank(),axis.title=element_blank(),axis.text=element_blank(),axis.ticks = element_blank())+scale_fill_gradientn("Land Area",colours=c("#DFEBF7","#11539A"))
 map1
 
 map2<-map1+geom_point(data=school@data,aes(x=lon_ggmap,y=lat_ggmap,group=id,col=type),size=2)+labs(col="Type")
 map2
+
+map3<-map2+geom_point(data=publix@data,aes(x=lon_ggmap,y=lat_ggmap,group=id,col=type),size=2)+labs(col="Type")
+map3
+
+map4<-map3+north(flbg_f,scale=0.2,symbol=3,location="topright")+scalebar(flbg_f,location="bottomleft",transform=T,dist_unit="mi",model="WGS84",dist=10,st.dist = 0.05)
+map4
+
+#export the map as a png image
+ggsave("map.png",dpi=300)
 
 ###########################################
 #Part 3. Visualization using QGIS (25 pts)#
