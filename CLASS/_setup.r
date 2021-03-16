@@ -34,14 +34,17 @@ library(tigris)
 library(raster)  
 library(dismo)  
 library(rgeos)
+library(sqldf)
+library(smacpod)
+library(rsatscan)
+library(spatstat)
 
 # Directories
 setwd(directory) # Set working directory
 
 # Quick Plots
 png('quick_plot.png') # Open file
-plot(map2) # Plot quick plot object
+plot(qp) # Plot quick plot object
 dev.off() # Close file
-
 
 
