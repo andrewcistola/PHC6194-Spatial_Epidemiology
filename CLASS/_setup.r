@@ -38,6 +38,8 @@ library(sqldf)
 library(smacpod)
 library(rsatscan)
 library(spatstat)
+library(lme4)
+library(arm)
 
 # Directories
 setwd(directory) # Set working directory

@@ -188,7 +188,7 @@ Warnings:
 
 Model Step 4: Predict Categorical targets with Artificial Neural Networks
 
-Target labels: binary = 
+Target labels: binary = Top quartile
 Target processing: train, test random 50-50 split
 
 Multi-Layer Perceptron

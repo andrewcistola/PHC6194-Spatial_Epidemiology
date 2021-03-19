@@ -1,0 +1,188 @@
+####################
+
+Title: PHC6194 Final Project- Social Detrerminants Associated with Mental Health Status
+Author(s): Andrew S. Cistola, MPH
+Address: hhtps://github.com/andrewcistola/healthyneighborhoods
+
+File Name: mh_beta
+Relative Path: PHC6194/FINAL/
+Local Path: /home/drewc/GitHub/
+
+Time Run: 2021-03-17 11:07:18.444586
+
+####################
+
+Step 1: Pull and Clean First Datasource from API
+
+Dataset: CDC PLACES 2020 Release by Zip Code
+
+Feature labels located in `CDC_PLACES_2019_ZCTA_staged` table
+Raw data located in `CDC_PLACES_2019_ZCTA_raw` table
+Staged data located in `CDC_PLACES_2019_ZCTA_labels` table
+
+Observations and variables: (32409, 29)
+
+        ZCTA  D1_1  D1_2  D1_3  D1_4  D1_5  D1_6  D1_7  D1_8  D1_9  D1_10  D1_11  D1_12  D1_13  D1_14  D1_15  D1_16  D1_17  D1_18  D1_19  D1_20  D1_21  D1_22  D1_23  D1_24  D1_25  D1_26  D1_27  D1_28
+0  ZCTA01086   6.9   3.9  36.4   6.1  11.6   0.8  12.1  68.7   0.6   71.8   58.0    NaN    1.7    NaN    NaN   10.5   79.7    0.8    7.5    0.6   12.6    NaN   19.3   16.8    4.7   31.9    0.3    NaN
+1  ZCTA04469  15.8   6.8  23.7   9.4  13.1   0.8  14.2  64.6   1.1   65.7   52.7   67.3    3.3    NaN    NaN   18.4   53.6    1.5    9.7    0.9   17.7   80.0   24.7   24.1    8.3   36.0    0.5    NaN
+2  ZCTA06269  11.1   5.5  20.9   9.5  15.3   0.8  13.4  61.2   1.1   71.0   55.5   59.0    3.2    NaN    NaN   16.1   68.0    1.7    7.7    0.9   17.6   81.8   22.7   22.0    7.8   35.6    0.6    NaN
+3  ZCTA08240  10.0   3.1  27.7   6.5  12.2   0.8  10.6  69.3   0.5   74.4   64.3    NaN    1.6    NaN    NaN    9.8   79.0    0.9    7.8    0.5   14.0    NaN   18.0   15.6    4.4   35.8    0.3    NaN
+4  ZCTA11549  10.2   2.7  26.6   5.7  13.5   0.8  11.3  71.2   0.5   73.7   64.1    NaN    1.7    NaN    NaN    8.8   77.8    0.9    7.6    0.6   12.1    NaN   16.5   14.8    4.1   36.0    0.3    NaN
+
+                                      Description                Label
+Feature                                                               
+D1_0                   CDC_PLACES_2019_ZCTA_zcta5                zcta5
+D1_1       CDC_PLACES_2019_ZCTA_access2_crudeprev    access2_crudeprev
+D1_2     CDC_PLACES_2019_ZCTA_arthritis_crudeprev  arthritis_crudeprev
+D1_3         CDC_PLACES_2019_ZCTA_binge_crudeprev      binge_crudeprev
+D1_4        CDC_PLACES_2019_ZCTA_bphigh_crudeprev     bphigh_crudeprev
+
+####################
+
+Step 2: Pull and Clean Second Datasource from API
+
+Dataset: CENSUS ACS 2020 Release by Zip Code
+     Table 1: Detailed Profile 2 (DP02) - Selected Social Characteristics
+     Table 2: Detailed Profile 3 (DP03) - Selected Economic Characteristics
+     Table 3: Detailed Profile 4 (DP04) - Selected Housing Characteristics
+     Table 4: Detailed Profile 5 (DP05) - Selected Economic Characteristics
+
+Raw data located in `CENSUS_ACS_2019_ZCTA_DP0#_staged` tables
+Staged data located in `CENSUS_ACS_2019_ZCTA_staged` table
+Feature labels located in `CENSUS_ACS_2019_ZCTA_staged` table
+
+Observations and variables: (33120, 366)
+
+        ZCTA  D2-1_4  D2-1_5  D2-1_6  D2-1_7  D2-1_8  D2-1_9  D2-1_10  D2-1_11  D2-1_12  D2-1_13  D2-1_14  D2-1_15  ...  D2-4_68  D2-4_69  D2-4_70  D2-4_71  D2-4_72  D2-4_73  D2-4_74  D2-4_75  D2-4_76  D2-4_77  D2-4_78  D2-4_79  D2-4_80
+0  ZCTA25245    58.5     6.8     0.0     0.0    15.6     0.0     15.6      4.4     25.9      0.0     20.1     20.1  ...      0.0    100.0    100.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0     46.6     53.4
+1  ZCTA25268    70.9    15.3     4.0     0.8    15.0     0.0      6.2      3.4     10.2      0.0      2.0      2.0  ...      0.0    100.0     99.3      0.0      0.0      0.0      0.0      0.0      0.7      0.0      0.7     51.7     48.3
+2  ZCTA25286    49.6    24.8     4.2     0.0    21.5     0.0     21.5      8.3     24.6      2.3      8.2      2.9  ...      0.0     99.7     94.0      0.0      0.0      0.0      0.0      0.0      5.7      0.0      5.7     54.9     45.1
+3  ZCTA25303    42.6    16.4     6.6     3.4    21.1     0.0     16.9      4.7     29.7      4.2     19.5      7.7  ...      0.2     98.7     82.9      9.2      1.4      3.4      0.0      0.0      1.8      0.0      1.8     50.0     50.0
+4  ZCTA25311    30.0     9.6     8.1     3.0    24.9     0.6     21.7      4.6     37.0      8.8     20.0      5.0  ...      0.5     98.5     76.1     15.2      0.4      0.8      0.0      0.0      6.1      0.0      6.1     48.3     51.7
+
+[5 rows x 366 columns]
+
+                                     Description Feature                     Label
+0                    CENSUS_ACS_2019_ZCTA_GEO_ID  D2-1_0                    GEO_ID
+1                     CENSUS_ACS_2019_ZCTA_state  D2-1_1                     state
+2  CENSUS_ACS_2019_ZCTA_zip code tabulation area  D2-1_2  zip code tabulation area
+3                      CENSUS_ACS_2019_ZCTA_NAME  D2-1_3                      NAME
+4               CENSUS_ACS_2019_ZCTA_DP02_0002PE  D2-1_4               DP02_0002PE
+
+####################
+
+Step 3: Pull 3rd Dataset from URL
+
+Dataset: HRSA Area health Resource File
+
+####################
+
+Step 4: Add Geographic Data
+
+Dataset: CENSUS TIGER 2018 Shapefiles by Zip Code
+
+####################
+
+Model Step 1: Raw Data Processing and Feature Engineering
+
+Target labels: quant = Mental health not good for ≥14 days among adults aged ≥18 years
+Target processing: nonNA
+
+              quant
+count  32409.000000
+mean      14.405819
+std        2.916757
+min        4.500000
+25%       12.300000
+50%       14.200000
+75%       16.100000
+max       38.000000
+
+Features labels: ACS Percent Estimates
+Feature processing: 75% nonNA, Median Imputed NA, Standard Scaled
+
+Rows, Columns: (32409, 365)
+
+####################
+
+Model Step 2: Identify Predictors with Open Models
+
+Models: Principal Component Analysis, Random Forests, Recursive feature Elimination
+
+Values: Eigenvectors, Gini Impurity, Boolean
+Thresholds: Mean, Mean, Cross Validation
+
+    Feature     MaxEV      Gini   RFE
+0   D2-4_72  0.175488  0.004682  True
+1   D2-4_34  0.173430  0.004763  True
+2    D2-4_9  0.167740  0.016370  True
+3   D2-3_54  0.165132  0.006072  True
+4   D2-1_85  0.136424  0.019218  True
+5   D2-1_47  0.126637  0.050321  True
+6   D2-2_84  0.125690  0.009955  True
+7   D2-4_10  0.121305  0.013306  True
+8   D2-1_44  0.119760  0.015163  True
+9   D2-2_57  0.117372  0.326147  True
+10  D2-2_67  0.111742  0.007664  True
+
+Final list of selected features
+[('D2-4_72', 'DP05_0079PE'), ('D2-4_34', 'DP05_0039PE'), ('D2-4_9', 'DP05_0008PE'), ('D2-3_54', 'DP04_0065PE'), ('D2-1_85', 'DP02_0132PE'), ('D2-1_47', 'DP02_0068PE'), ('D2-2_84', 'DP03_0128PE'), ('D2-4_10', 'DP05_0009PE'), ('D2-1_44', 'DP02_0065PE'), ('D2-2_57', 'DP03_0074PE'), ('D2-2_67', 'DP03_0085PE')]
+
+####################
+
+Model Step 3: Create Informative Preidction Model
+
+Models: Multiple Linear Regression Model
+
+                                 OLS Regression Results                                
+=======================================================================================
+Dep. Variable:                  quant   R-squared (uncentered):                   0.934
+Model:                            OLS   Adj. R-squared (uncentered):              0.934
+Method:                 Least Squares   F-statistic:                          4.128e+04
+Date:                Wed, 17 Mar 2021   Prob (F-statistic):                        0.00
+Time:                        14:21:16   Log-Likelihood:                         -87690.
+No. Observations:               31971   AIC:                                  1.754e+05
+Df Residuals:                   31960   BIC:                                  1.755e+05
+Df Model:                          11                                                  
+Covariance Type:            nonrobust                                                  
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+D2-4_72       -0.0040      0.034     -0.118      0.906      -0.071       0.063
+D2-4_34        0.0562      0.033      1.681      0.093      -0.009       0.122
+D2-4_9         0.3048      0.005     56.061      0.000       0.294       0.316
+D2-3_54        0.0657      0.001     85.816      0.000       0.064       0.067
+D2-1_85        0.1139      0.001     85.075      0.000       0.111       0.117
+D2-1_47        0.0349      0.004      9.601      0.000       0.028       0.042
+D2-2_84        0.1397      0.003     52.965      0.000       0.135       0.145
+D2-4_10        0.1594      0.005     33.040      0.000       0.150       0.169
+D2-1_44        0.0994      0.005     18.232      0.000       0.089       0.110
+D2-2_57        0.2002      0.003     74.598      0.000       0.195       0.205
+D2-2_67       -0.0469      0.003    -14.712      0.000      -0.053      -0.041
+==============================================================================
+Omnibus:                     4068.291   Durbin-Watson:                   1.884
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            24391.952
+Skew:                          -0.462   Prob(JB):                         0.00
+Kurtosis:                       7.178   Cond. No.                         129.
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+[('D2-4_72', 'DP05_0079PE'), ('D2-4_34', 'DP05_0039PE'), ('D2-4_9', 'DP05_0008PE'), ('D2-3_54', 'DP04_0065PE'), ('D2-1_85', 'DP02_0132PE'), ('D2-1_47', 'DP02_0068PE'), ('D2-2_84', 'DP03_0128PE'), ('D2-4_10', 'DP05_0009PE'), ('D2-1_44', 'DP02_0065PE'), ('D2-2_57', 'DP03_0074PE'), ('D2-2_67', 'DP03_0085PE')]
+
+####################
+
+Model Step 4: Predict Categorical targets with Artificial Neural Networks
+
+Target labels: binary = Top quartile
+Target processing: train, test random 50-50 split
+
+Multi-Layer Perceptron
+Layers: Dense, Dense, Activation
+Functions: ReLU, ReLU, Sigmoid
+All features: AUC = 0.8407579982872309, Epochs = 100
+Mr. Fractureproof Features: AUC = 0.7813079219419318, Epochs = 100
+
+####################
+

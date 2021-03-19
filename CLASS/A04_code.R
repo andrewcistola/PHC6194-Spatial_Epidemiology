@@ -92,6 +92,8 @@ library(sp)
 fl = merge(fl, lm, by = 'GEOID')
 head(fl)
 
+git filter-branch --force --index-filter "git rm --cached --ignore-unmatch CLASS/WK4/wk4_sqldata1.sql" --prune-empty --tag-name-filter cat -- --all
+
 #Q13. Create a new variable "quad_sig" in "fl" to save the moran plot quadrant (1=low-low, 2=low-high, 3=high-low, 4=high-high, 5=non-significant (use 0.1 as sig level)). (5 pts)
 fl$quad_sig <- NA # create a new variable identifying the moran plot quadrant (dismissing the non-siginificant ones)
 q = vector(mode = "numeric", length = nrow(lm))
