@@ -1,4 +1,4 @@
-setwd(paste(directory, 'WK9'))
+setwd(paste(directory, 'WK9', sep = ''))
 
 #load the packages
 library(lme4)

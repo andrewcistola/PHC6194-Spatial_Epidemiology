@@ -38,8 +38,8 @@ library(sqldf)
 library(smacpod)
 library(rsatscan)
 library(spatstat)
-library(lme4)
-library(arm)
+library(lme4) # Linear mixed effect modeling in R
+library(arm) # Visualizations of linear mixed effect modeling using 'lme4' in R
 
 # Directories
 setwd(directory) # Set working directory
