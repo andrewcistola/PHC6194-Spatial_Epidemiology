@@ -1,11 +1,14 @@
 # PHC 6194 - Spatial Epidemiology
-PHC 6194 - Spatial Epidemiology (Spring 2021)
-
+PHC 6194 - Spatial Epidemiology (Spring 2021)<br>
+<br>
+![](FINAL/2021-03-22/_fig/Florida_standardized_map.png)<br>
+<br>
 ## About this Repository
-This repository contains student work completed for PHC 6194 Spatial Epidemiology taken in Spring of 2021 from Dr. Hui Hu (https://www.hui-hu.com) at the University of Florida. Course content is pulled from https://github.com/benhhu/PHC6194SPR2021 and stored with completed assignments in this repoistory. At the end of the semester, visibility of the repo will be changed to private to protect answers from future students taking the course. 
+This repository contains student work completed for PHC 6194 Spatial Epidemiology taken in Spring of 2021 from Dr. Hui Hu (https://www.hui-hu.com) at the University of Florida. Course content is pulled from `https://github.com/benhhu/PHC6194SPR2021` and stored with completed assignments in this repoistory. Visibility of the repo is private to protect unauthorized dissemination of course content.
 
 ## Directory
-`WK1` Week 1 Course content<br>
+`CLASS` Mirror of class content in `https://github.com/benhhu/PHC6194SPR2021` with assignment submissions added<br>
+`FINAL` directory containing files used for final project in collaboration with `https://github.com/alyssaberger`
 `_code` Code scripts not connected to assignments, labs, or projects<br>
 `_data` Data files taken from https://github.com/andrewcistola/healthy-neighborhoods.git for use in final project<br>
 `LICENSE` Generic MIT licenses for open source projects from DrewC!<br>
@@ -14,16 +17,6 @@ This repository contains student work completed for PHC 6194 Spatial Epidemiolog
 
 ## Organization and Style
 This repository uses the following description for file organization and coding style:
-
-### File Organization:
-This repository organizes file by project specfic topics and generic folders<br>
-Project specfic topic descriptions are included in the README<br>
-Generic folders may include the following based on the needs of the repository:<br>
-`_code` Code scripts used by multiple projects<br>
-`_fig` Figures used by multiple projects<br>
-`_data` Data files use dmy multiple projects<br>
-`_archive` Old files no longer used<br>
-`_refs` References, literature, or documentation files<br>
 
 ### File Names:
 File names use 2-6 letter label based on the file content followed by standard prefixes and suffixes<br>
