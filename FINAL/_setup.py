@@ -1,15 +1,4 @@
-# allocativ v3.0.21
-
-## Local
-local = '/home/drewc/GitHub/PHC6194/' # Input local path to directory where allocativ folder was placed
-title = 'Finding Equity' # Input basic title
-descriptive = '- Social Determinants Associated with ' # Input descriptive title
-outcome = 'Estimated Mental Health Status' # Description of dependent variable
-author = 'Andrew S. Cistola, MPH; Alyyssa Berge, MPH' # Input full legal name of author
-subject = 'FINAL/' # Input an informative short directory label for the subject of the analysis
-DV = 'mhlth_crudeprev' # Column name for dependent variable in public data file
-key_census = 'c82350b0bbe6c8a46ce163365ee3f2abcd16253e'
-reference = 'PLACES Project. Centers for Disease Control and Prevention. https://www.cdc.gov/places'
+# allocativ 3001.2021
 
 ## Libraries
 import os # Operating system navigation
