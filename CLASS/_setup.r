@@ -7,7 +7,7 @@ descriptive = '- Lab and Assignment Setup Script' # Input descriptive title
 author = 'Andrew S. Cistola, MPH' # Input author information
 GH = 'https://github.com/andrewcistola/PHC6194' # Input GitHub repository
 project = 'CLASS/' # Input project file name inside repository
-repo = 'PHC6194/' # Input repository filename
+repo = '_dev_PHC6194/' # Input repository filename
 local = '/home/drewc/GitHub/' # Input local path to repository
 directory = paste(local, repo, project, sep = "") # Set wd to project repository using variables
 day = Sys.Date() # Save dimple date as string
@@ -40,6 +40,8 @@ library(rsatscan)
 library(spatstat)
 library(lme4) # Linear mixed effect modeling in R
 library(arm) # Visualizations of linear mixed effect modeling using 'lme4' in R
+library(GWmodel) # Geographic weighted regression in R
+
 
 # Directories
 setwd(directory) # Set working directory

@@ -1,15 +1,21 @@
+script = 'Assignment 4 Submission' # Input desacriptive script title
+name = 'A04' # Input script name (subject, version, other)
+user = 'Andrew S. Cistola, MPH; https://github.com/andrewcistola' # Input name and GitHub profile of user
+
 #Assignment 5
 
 #Q0. Load packages "GWmodel", "tigris", "sqldf", "lme4", "rgeos", "arm", "ggplot2", "plyr" and set "WK10" folder as the working directory (0 pt)
-
+install.packages('GWmodel')
+library(GWmodel) # Geographic weighted regression in R
 library(tigris)  
 library(sqldf)
 library(lme4) # Linear mixed effect modeling in R
 library(rgeos) 
-library(arm) # Visualizations of linear mixed effect modeling using 'lme4' in R
+library(arm) # Visualiqzations of linear mixed effect modeling using 'lme4' in R
 library(ggplot2) # General use plotting library from Hadley Wickham
 library(plyr) # Data manipulation from Hadley Wickham 
 
+setwd(paste(directory, 'WK10', sep = ''))
 
 
 ########################################
@@ -17,28 +23,44 @@ library(plyr) # Data manipulation from Hadley Wickham
 ########################################
 
 #Q1. Load the built-in data "USelect" using the data() function. Print the first 6 rows of its data slot, and check its SRID. (2 pts)
-
+data(USelect)
+head(USelect2004@data) 
+USelect2004@proj4string
 
 #Q2. Assign SRID 4326 to USelect2004, and add an id variable "electid" to the data slot of "USelect2004" with value automatically increased from 1 to 3111. (2 pts)
-
+USelect2004@proj4string <- CRS("+init=epsg:4326") # Change SRID to 4326
+USelect2004@data$electid <- rownames(USelect2004@data) # Save index as column to create row of ascending values
+head(USelect2004@data) # Verify
 
 #Q3. Download boundaries of all states using the states() function from the package "tigris", save them as an object "us", and check its SRID. (1 pt)
-
+us = states() # Import built in dataset
+us = as(us, 'Spatial') # Convert sp to sf object (spatial data frame)
+us@proj4string # Verify
 
 #Q4. Transform the SRID of "us" to 4326, and remove Alaska (02), Hawaii (15), American Samoa (60), Guam (66), Northern Mariana Islands (69), Puerto Rico (72), and Virgin Islands (78). (5 pts)
-
+us@proj4string <- CRS("+init=epsg:4326") # Change SRID to 4326
+us@proj4string # Check SRID
+us@data = us@data[us@data$GEOID != c('02', '15', '60', '66', '69', '72', '78'), ] # Subset based on vector
+us@data$GEOID # Verify
 
 #Q5. Import "stateEduc.csv" from the "dat" folder as "stateEduc". Rename "GEO.id2" to "GEOID". (2 pts)
-
+stateEduc = read.csv("dat/stateEduc.csv") # Import dataset from _data folder
+names(stateEduc)[names(stateEduc) == "GEO.id2"] <- "GEOID" # Rename column in base R
+head(stateEduc) # Verify
 
 #Q6. Calculate percentage of population with education less than high school (HD01_VD02/HD01_VD01), save it as a new column "plowedu". (2 pts)
-
+stateEduc$plowedu = stateEduc$HD01_VD02 / stateEduc$HD01_VD01
+stateEduc = stateEduc[c('GEOID', 'plowedu')] # Select columns of dataframe
+head(stateEduc)
 
 #Q7. Merge "plowedu" to the data slot of "us" based on "GEOID". (5 pts)
-
+stateEduc = stateEduc[c('GEOID', 'plowedu')] # Select columns of dataframe
+us@data = merge(us@data, stateEduc, by = 'GEOID') # Merge by column
+head(us@data) # Verify
 
 #Q8. Get the centroids of election divisions, and save them as "centroidelect". (3 pts)
-
+centroidelect <- gCentroid(USelect2004, byid = T, id = USelect2004$electid) # get the centroid points of polygons
+centroidelect # Verify
 
 #Q9. Use the over() function to overlay the centroids and state boundaries, and merge "GEOID" and "plowedu" from "us" to "USelect2004". (5 pts)
 
@@ -79,3 +101,4 @@ library(plyr) # Data manipulation from Hadley Wickham
 #Q23. Calculate the OR for each 10% increase in "pctcoled" and save it as a new column "ORpctcoled" in "us". Print out the first 6 ORs. (5 pts)
 
 #Q24. Map the ORs. (5 pts)
+
