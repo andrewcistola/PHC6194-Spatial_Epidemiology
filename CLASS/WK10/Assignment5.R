@@ -14,9 +14,7 @@ library(rgeos)
 library(arm) # Visualiqzations of linear mixed effect modeling using 'lme4' in R
 library(ggplot2) # General use plotting library from Hadley Wickham
 library(plyr) # Data manipulation from Hadley Wickham 
-
 setwd(paste(directory, 'WK10', sep = ''))
-
 
 ########################################
 #Part 1. Data Import and Clean (30 pts)#
@@ -63,10 +61,16 @@ centroidelect <- gCentroid(USelect2004, byid = T, id = USelect2004$electid) # ge
 centroidelect # Verify
 
 #Q9. Use the over() function to overlay the centroids and state boundaries, and merge "GEOID" and "plowedu" from "us" to "USelect2004". (5 pts)
-
+us = over(centroidelect, us) # Overlay centroids of small geography (arg1) onto larger polygons (arg2). This will create a new dataframe with columns of agr2 with rows of arg1
+us$electid <- rownames(Q09) # Save index as column to create row of ascending values
+us = us[c('GEOID', 'plowedu', 'electid')] # Select columns of dataframe
+USelect2004 = merge(USelect2004, us, by = 'electid')
+head(USelect2004)
 
 #Q10. Create a new column in "USelect2004" named "bush", which equals to 1 if winner="Bush", and 0 otherwise. (3 pts)
-
+USelect2004@data$Bush[USelect2004@data$winner == 'Bush'] <- 1 # Create new column based on conditions
+USelect2004@data$Bush[USelect2004@data$winner != 'Bush'] <- 0 # Create new column based on conditions
+head(USelect2004) # Verify
 
 #######################################
 #Part 2. Mixed Effects Models (30 pts)#
