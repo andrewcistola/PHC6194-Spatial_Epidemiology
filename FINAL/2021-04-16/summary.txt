@@ -1,0 +1,106 @@
+####################
+
+Title: Finding Equity- Ecological Determinants Associated with Public Health OutcomesEstimated Poor Mental Health Status
+Author(s): Alyssa Berger, MPH; Andrew S. Cistola, MPH
+
+Local Path: /home/drewc/GitHub/_dev_PHC6194/FINAL/2021-04-16/
+Time Run: 2021-04-16 08:40:35.106898
+
+####################
+
+Data Step 1: Pull and Clean Datasource from API
+
+Dataset: CDC PLACES 2020 Release by Zip Code
+URL: https://www.cdc.gov/places/index.html
+Table: CDC_PLACES_2019_ZCTA
+Observations and variables: (32410, 28)
+
+           D1_1  D1_2  D1_3  D1_4  D1_5  D1_6  D1_7  D1_8  D1_9  D1_10  D1_11  D1_12  D1_13  D1_14  D1_15  D1_16  D1_17  D1_18  D1_19  D1_20  D1_21  D1_22  D1_23  D1_24  D1_25  D1_26  D1_27  D1_28
+ZCTA                                                                                                                                                                                                
+ZCTA0       1.0   2.0   3.0   4.0   5.0   6.0   7.0   8.0   9.0   10.0   11.0   12.0   13.0   14.0   15.0   16.0   17.0   18.0   19.0   20.0   21.0   22.0   23.0   24.0   25.0   26.0   27.0   28.0
+ZCTA01086   6.9   3.9  36.4   6.1  11.6   0.8  12.1  68.7   0.6   71.8   58.0    NaN    1.7    NaN    NaN   10.5   79.7    0.8    7.5    0.6   12.6    NaN   19.3   16.8    4.7   31.9    0.3    NaN
+ZCTA04469  15.8   6.8  23.7   9.4  13.1   0.8  14.2  64.6   1.1   65.7   52.7   67.3    3.3    NaN    NaN   18.4   53.6    1.5    9.7    0.9   17.7   80.0   24.7   24.1    8.3   36.0    0.5    NaN
+ZCTA06269  11.1   5.5  20.9   9.5  15.3   0.8  13.4  61.2   1.1   71.0   55.5   59.0    3.2    NaN    NaN   16.1   68.0    1.7    7.7    0.9   17.6   81.8   22.7   22.0    7.8   35.6    0.6    NaN
+ZCTA08240  10.0   3.1  27.7   6.5  12.2   0.8  10.6  69.3   0.5   74.4   64.3    NaN    1.6    NaN    NaN    9.8   79.0    0.9    7.8    0.5   14.0    NaN   18.0   15.6    4.4   35.8    0.3    NaN
+
+         index                               Description                Label
+Feature                                                                      
+D1_0         0                CDC_PLACES_2019_ZCTA_zcta5                zcta5
+D1_1         1    CDC_PLACES_2019_ZCTA_access2_crudeprev    access2_crudeprev
+D1_2         2  CDC_PLACES_2019_ZCTA_arthritis_crudeprev  arthritis_crudeprev
+D1_3         3      CDC_PLACES_2019_ZCTA_binge_crudeprev      binge_crudeprev
+D1_4         4     CDC_PLACES_2019_ZCTA_bphigh_crudeprev     bphigh_crudeprev
+
+####################
+
+Data Step 2: Import Second Dataset from API
+
+Dataset: CENSUS ACS 2020 Release by Zip Code
+URL: https://www.census.gov/programs-surveys/acs/
+Table: CENSUS_ACS_2019_ZCTA
+Observations and variables: (33120, 366)
+
+        ZCTA  D2_T1_4  D2_T1_5  D2_T1_6  D2_T1_7  D2_T1_8  D2_T1_9  D2_T1_10  D2_T1_11  D2_T1_12  D2_T1_13  ...  D2_T4_70  D2_T4_71  D2_T4_72  D2_T4_73  D2_T4_74  D2_T4_75  D2_T4_76  D2_T4_77  D2_T4_78  D2_T4_79  D2_T4_80
+0  ZCTA25245     58.5      6.8      0.0      0.0     15.6      0.0      15.6       4.4      25.9       0.0  ...     100.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0      46.6      53.4
+1  ZCTA25268     70.9     15.3      4.0      0.8     15.0      0.0       6.2       3.4      10.2       0.0  ...      99.3       0.0       0.0       0.0       0.0       0.0       0.7       0.0       0.7      51.7      48.3
+2  ZCTA25286     49.6     24.8      4.2      0.0     21.5      0.0      21.5       8.3      24.6       2.3  ...      94.0       0.0       0.0       0.0       0.0       0.0       5.7       0.0       5.7      54.9      45.1
+3  ZCTA25303     42.6     16.4      6.6      3.4     21.1      0.0      16.9       4.7      29.7       4.2  ...      82.9       9.2       1.4       3.4       0.0       0.0       1.8       0.0       1.8      50.0      50.0
+4  ZCTA25311     30.0      9.6      8.1      3.0     24.9      0.6      21.7       4.6      37.0       8.8  ...      76.1      15.2       0.4       0.8       0.0       0.0       6.1       0.0       6.1      48.3      51.7
+
+[5 rows x 366 columns]
+
+                                     Description  Feature                     Label
+0                    CENSUS_ACS_2019_ZCTA_GEO_ID  D2_T1_0                    GEO_ID
+1                     CENSUS_ACS_2019_ZCTA_state  D2_T1_1                     state
+2  CENSUS_ACS_2019_ZCTA_zip code tabulation area  D2_T1_2  zip code tabulation area
+3                      CENSUS_ACS_2019_ZCTA_NAME  D2_T1_3                      NAME
+4               CENSUS_ACS_2019_ZCTA_DP02_0002PE  D2_T1_4               DP02_0002PE
+
+####################
+
+Data Step 3: Import 3rd Dataset from URL and Extract
+
+Dataset: Dataset: HRSA Area health Resource File
+URL: https://data.hrsa.gov/DataDownload/AHRF/AHRF_2019-2020.ZIP
+Table: HRSA_AHRF_2019_FIPS
+####################
+
+Data Step 4: Pull and Clean Datasource from local file
+
+Dataset: HCUP National Inpatient Sample 2019 Florida by Zip Code
+URL: https://www.hcup-us.ahrq.gov/db/nation/nis/nisdbdocumentation.jsp
+Table: HCUP_NIS_2019_FL_ZCTA
+####################
+
+Shape Step 1: Import Zip Code Geographies from Shapefile
+
+Dataset: CENSUS TIGER 2018 Shapefiles by Zip Code
+URL: https://www2.census.gov/geo/tiger/GENZ2018/shp/cb_2018_us_zcta510_500k.zip
+Table: CENSUS_TIGER_2018_ZCTA
+Observations and variables: (33144, 3)
+
+        ZCTA                                           geometry                               coordinates
+0  ZCTA36083  MULTIPOLYGON (((-85.63225 32.28098, -85.62439 ...  (-85.68244274220686, 32.388409979501596)
+1  ZCTA35441  MULTIPOLYGON (((-87.83287 32.84437, -87.83184 ...    (-87.7386096018864, 32.85373564403455)
+2  ZCTA35051  POLYGON ((-86.74384 33.25002, -86.73802 33.251...   (-86.61971303654754, 33.20546701153693)
+3  ZCTA35121  POLYGON ((-86.58527 33.94743, -86.58033 33.948...   (-86.45527191805489, 33.94124559458578)
+4  ZCTA35058  MULTIPOLYGON (((-86.87884 34.21196, -86.87649 ...   (-86.73787658126403, 34.23133826715403)
+
+####################
+
+Shape Step 2: Import County Geographies from Shapefile
+
+Dataset: CENSUS TIGER 2018 Shapefiles by County
+URL: https://www2.census.gov/geo/tiger/TIGER2020/COUNTY/tl_2020_us_county.zip
+Table: CENSUS_TIGER_2018_FIPS
+Observations and variables: (3234, 3)
+
+        FIPS                                           geometry                               coordinates
+0  FIPS31039  POLYGON ((-97.01952 42.00410, -97.01952 42.004...   (-96.78740067156328, 41.91640371079448)
+1  FIPS53069  POLYGON ((-123.43639 46.23820, -123.44759 46.2...  (-123.43346991362158, 46.29113381398982)
+2  FIPS35011  POLYGON ((-104.56739 33.99757, -104.56772 33.9...  (-104.41195788796497, 34.34241351170314)
+3  FIPS31109  POLYGON ((-96.91075 40.78494, -96.91075 40.790...   (-96.68775550398634, 40.78417354489708)
+4  FIPS31129  POLYGON ((-98.27367 40.08940, -98.27367 40.089...    (-98.04718498967358, 40.1763796295172)
+
+####################
+

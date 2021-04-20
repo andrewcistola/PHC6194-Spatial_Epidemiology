@@ -19,6 +19,7 @@ from sklearn.decomposition import PCA # Principal compnents analysis from sklear
 from sklearn.ensemble import RandomForestRegressor # Random Forest regression component
 from sklearn.feature_selection import RFECV # Recursive Feature elimination with cross validation
 from sklearn.svm import LinearSVC # Linear Support Vector Classification from sklearn
+from sklearn.svm import LinearSVR # Linear Support Vector Regression from sklearn
 from sklearn.linear_model import LinearRegression # Used for machine learning with quantitative outcome
 from sklearn.linear_model import LogisticRegression # Used for machine learning with quantitative outcome
 from sklearn.model_selection import train_test_split # train test split function for validation
@@ -31,6 +32,8 @@ from keras.models import Sequential # Uses a simple method for building layers i
 from keras.models import Model # Uses a more complex method for building layers in deeper networks
 from keras.layers import Dense # Used for creating dense fully connected layers
 from keras.layers import Input # Used for designating input layers
+
+# https://pypi.org/project/censusviz/
 
 ## Variables
 day = str(date.today()) + '/' # Save date stamp for use in file names
@@ -53,18 +56,11 @@ con_1 = sqlite3.connect('_data/' + 'public' + '.db') # Create local database fil
 cur_1 = con_1.cursor() # Create cursor object for modidying connected database
 
 ## Summary
-text_file = open('summary.txt', 'w') # Write new corresponding text file
+text_file = open('summary.txt', 'a') # Write new corresponding text file
 text_file.write('####################' + '\n\n') # Add section break for end of step
 text_file.write('Title: ' + title + descriptive + outcome + '\n') # Script title
 text_file.write('Author(s): ' + author + '\n\n') # Project Author(s)
 text_file.write('Local Path: ' + directory + '\n') # Directory used for script run
 text_file.write('Time Run: ' + stamp + '\n') # Timestamp of script run
 text_file.write('\n' + '####################' + '\n\n') # Add section break for end of step
-text_file.close() # Close file
-
-## README
-text_file = open(local + subject + 'README.txt', 'w') # Write new corresponding text file
-text_file.write(title + descriptive + outcome + '\n') # Script title
-text_file.write(author + '\n\n') # Project Author(s)
-text_file.write('This directroy was created from scripts located in `' + local + 'allocativ/`. Refer there for more documentation.\n\n') # allocativ location and documentation
 text_file.close() # Close file
