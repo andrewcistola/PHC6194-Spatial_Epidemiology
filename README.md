@@ -1,7 +1,7 @@
 # PHC 6194 - Spatial Epidemiology
 PHC 6194 - Spatial Epidemiology (Spring 2021)<br>
 <br>
-![](FINAL/2021-03-22/_fig/Florida_standardized_map.png)<br>
+![](FINAL/2021-04-19/_fig/FL_smoothed_trad_map.png)<br>
 <br>
 ## About this Repository
 This repository contains student work completed for PHC 6194 Spatial Epidemiology taken in Spring of 2021 from Dr. Hui Hu (https://www.hui-hu.com) at the University of Florida. Course content is pulled from `https://github.com/benhhu/PHC6194SPR2021` and stored with completed assignments in this repoistory. Visibility of the repo is private to protect unauthorized dissemination of course content.
@@ -14,22 +14,6 @@ This repository contains student work completed for PHC 6194 Spatial Epidemiolog
 `LICENSE` Generic MIT licenses for open source projects from DrewC!<br>
 `.gitattributes` File extensions marked for GH large file storage<br>
 `README.md` Description, directory, notes<br>
-
-## Organization and Style
-This repository uses the following description for file organization and coding style:
-
-### File Names:
-File names use 2-6 letter label based on the file content followed by standard prefixes and suffixes<br>
-Template: `topic_version_suffix.ext`<br>
-Greek alphabet is used to represent file versions:<br>
-`alpha_`, `beta_`, `gamma_`... `omega_`<br> 
-Standard suffixes represent the following types of files:<br>
-`_code` Development code script for working in an IDE<br>
-`_book` Jupyter notebook <br>
-`_stage` Data files that have been modified from raw source<br>
-`_2020-01-01` Text scripts with results output with date it was run<br>
-`_map` 2D geographic display<br>
-`_graph` 2D chart or graph representing numeric data
 
 ### Variable Names:
 Python and R code scripts use the following variable naming conventions:<br>
