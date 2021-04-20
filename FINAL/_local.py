@@ -1,4 +1,4 @@
-# allocativ 3001.2021
+# allocativ 3001.2021.0002
 
 ## Local
 local = '/home/drewc/GitHub/_dev_PHC6194/' # Input local path to directory containing the subject where allocativ folder was placed

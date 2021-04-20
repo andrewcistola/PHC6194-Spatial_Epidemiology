@@ -1,4 +1,4 @@
-# allocativ 3001.2021
+# allocativ 3001.2021.0002
 
 ## Copy allocativ to local repo
 os.popen('cp ' + local + subject + '_local ' + local + subject + '_local.py')

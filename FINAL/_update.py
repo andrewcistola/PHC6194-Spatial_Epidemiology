@@ -1,4 +1,4 @@
-# allocativ 3001.2021
+# allocativ 3001.2021.0002
 
 ## Update allocativ repo with edits in local repo
 os.popen('cp ' + local + subject + '_setup.py ' + path + '_dev_allocativ/_setup.py')
