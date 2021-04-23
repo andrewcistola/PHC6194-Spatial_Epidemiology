@@ -334,6 +334,32 @@ df_select = merge(df_select, df_labels, by = 'Feature')
 head(df_select)
 write.csv(df_select, paste('_data/_stats_FINAL.csv', sep = ''), row.names = FALSE) # Clean in excel and select variable
 
+
+install.packages('finalfit')
+library(finalfit)
+D2$D3_1029 <- D2$AHRF1029
+
+
+
+df_ff = D2[c(Feature, 'FIPS')]
+colnames(df_ff) <- c(df_select$Description, 'County')
+df_ff$natural_log_of_crude_prevalance <- D2$log
+
+head(df_ff)
+
+explanatory = c("Households By Type Total Households Average Household Size", 
+                    "Educational Attainment Population 25 Years And Over Bachelor'S Degree Or Higher",
+                    "Class Of Worker Civilian Employed Population 16 Years And Over Government Workers",
+                    "Percentage Of Families And People Whose Income In The Past 12 Months Is Below The Poverty Level People In Families",
+                    "Sex And Age Total Population Female")                                                                              
+dependent = ('natural_log_of_crude_prevalance')
+explanatory_multi = ('Manufacturing-Dep Typology Code')
+random_effect = 'County'
+df_ff %>% finalfit(dependent, explanatory, random_effect)
+
+
+
+
 ### Export to Summary File
 sink(file = 'summary.txt', append = TRUE, type = 'output')
 cat(c(final, '\n\n'), file = 'summary.txt', append = TRUE)
