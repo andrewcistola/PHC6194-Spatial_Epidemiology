@@ -41,6 +41,7 @@ library(spatstat)
 library(lme4) # Linear mixed effect modeling in R
 library(arm) # Visualizations of linear mixed effect modeling using 'lme4' in R
 library(GWmodel) # Geographic weighted regression in R
+library(INLA)
 
 
 # Directories
